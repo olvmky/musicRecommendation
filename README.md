@@ -1,37 +1,13 @@
 # Music Recommendation
-Creating a music recommendation app that stands out from Spotify involves focusing on unique features, user experience, and niche audiences. Here are some ideas to consider:
+SoundWave is a personalized music platform that offers mood-based playlists, dynamic music discovery, and real-time social interaction, catering to music lovers seeking more tailored recommendations, interactive features, and evolving playlists beyond the limitations of traditional services.
  
-1. **Personalized Curation**: Use AI to analyze user moods, activities, or preferences to create custom playlists that evolve in real-time.
- 
-2. **Community-Based Recommendations**: Allow users to follow friends or influencers and see what they’re listening to. Implement a social feed where users can share songs and playlists.
- 
-3. **Thematic Playlists**: Curate playlists around specific themes, events, or trends (e.g., seasonal playlists, workout mixes, or soundtracks for different activities).
- 
-4. **Enhanced Discovery**: Implement features like “music journeys” that introduce users to artists based on their current favorites, guiding them through related genres and styles.
- 
-5. **User-Generated Content**: Enable users to create and share their playlists or write reviews and commentary on songs, fostering a more engaged community.
- 
-6. **Local Music Spotlight**: Highlight local artists and genres based on user location, helping users discover music from their own communities.
- 
-7. **Interactive Experiences**: Introduce features like quizzes or polls about music preferences that lead to tailored recommendations or playlists.
- 
-8. **Exclusive Content**: Collaborate with artists for exclusive releases, behind-the-scenes content, or live-streamed events that users can access only through your app.
- 
-9. **Mood and Activity Tags**: Allow users to tag their playlists and songs with moods or activities, making it easier for others to find music suited to specific moments.
- 
-10. **Visual and Audio Elements**: Enhance the user interface with rich visuals, artist visuals, or even AR experiences that complement the music.
- 
-11. **Collaborative Playlists**: Allow users to create playlists together in real time, making it a social experience.
- 
-12. **Feedback Loop**: Encourage users to rate recommendations, which helps improve the algorithm and creates a more personalized experience over time.
- 
-13. **Integration with Other Media**: Combine music with podcasts, audiobooks, or even video content, providing a more holistic audio experience.
- 
-14. **Focus on Niche Genres**: Cater to specific genres or communities (e.g., indie, classical, international music) that might be underserved by mainstream platforms.
- 
-15. **Gamification**: Introduce rewards or challenges for discovering new music, attending virtual concerts, or engaging with the community.
- 
-By emphasizing these unique features and focusing on creating a user-friendly and engaging experience, your app can carve out a distinct niche in the crowded music streaming market.
+Features we plan to deliver this semester
+1. ***Mood-Based Tagging***: Users can tag songs and playlists with emojis to represent the mood or vibe of the music (e.g., happy, sad, energetic). This data will later be used to filter songs and improve recommendations, allowing users to find music that matches their emotional state quickly.
+2. ***Social Interaction***: Add a comment section for each song and playlist where users can engage in discussions, share opinions, and recommend similar tracks to others. This feature fosters community-building and deeper user engagement.
+3. ***Dynamic Music Search***: Implement a real-time search feature that adapts based on user input. Users can filter songs by mood, genre, artist, occasions, or other attributes. The search results update dynamically as users refine their preferences, ensuring they find the perfect tracks tailored to both their personal taste and specific events or activities.
+4. ***Personalized Music List Recommendations (Advanced Feature)***: Utilize user preferences, listening history, and behavior to generate personalized music recommendations. Over time, the platform will refine suggestions based on user feedback, such as favoring certain songs, avoiding specific genres, or skipping explicit content. Additionally, the system will offer alternative or similar music suggestions to enhance discovery.
+5. ***Monthly Music Popularity (Advanced Feature)***: Analyze the popularity of tracks each month, using an algorithm that scores songs from 0 to 100 based on total and recent plays. This feature highlights the most popular songs of the moment and curates holiday-specific recommendations based on seasonal trends. Users can explore tracks that are trending now or revisit top songs from past months to create perfect playlists for upcoming holidays or special occasions.
+
 ```mermaid
 classDiagram
     
