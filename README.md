@@ -149,3 +149,106 @@ classDiagram
 
 
 ```
+
+```mermaid
+classDiagram
+
+    class Albums {
+        INT AlbumId PK
+        VARCHAR AlbumName
+    }
+
+    class Genres {
+        INT GenreId PK
+        VARCHAR GenreName
+    }
+
+    class Tracks {
+        VARCHAR TrackId PK
+        VARCHAR TrackName
+        INT AlbumId FK
+        INT GenreId FK
+        INT Popularity
+        DECIMAL DurationMs
+        BOOLEAN Explicit
+        DECIMAL Danceability
+        DECIMAL Energy
+        INT Pitch
+        DECIMAL Loudness
+        INT Modality
+        DECIMAL Speechiness
+        DECIMAL Acousticness
+        DECIMAL Instrumentalness
+        DECIMAL Valence
+        DECIMAL Tempo
+        INT TimeSignature
+    }
+
+    class Artists {
+        INT ArtistId PK
+        VARCHAR ArtistName
+    }
+
+    class TrackArtists {
+        VARCHAR TrackId PK FK
+        INT ArtistId PK FK
+    }
+
+    class Users {
+        VARCHAR UserName PK
+        VARCHAR Password
+        VARCHAR FirstName
+        VARCHAR LastName
+        VARCHAR Email
+        VARCHAR Phone
+    }
+
+    class Comments {
+        INT CommentId PK
+        TIMESTAMP Created
+        VARCHAR Content
+        VARCHAR UserName FK
+        VARCHAR TrackId FK
+    }
+
+    class LikeAndDislike {
+        INT ReviewId PK
+        TIMESTAMP Created
+        BOOLEAN LikeOrDislike
+        VARCHAR TrackId FK
+        VARCHAR UserName FK
+    }
+
+    class MoodTag {
+        INT MoodId PK
+        ENUM Mood
+        VARCHAR TrackId FK
+        VARCHAR UserName FK
+    }
+
+    class ListeningHistory {
+        INT HistoryId PK
+        TIMESTAMP Created
+        INT TimesListened
+        INT Duration
+        VARCHAR TrackId FK
+        VARCHAR UserName FK
+    }
+
+    class PlayLists {
+        INT PlayListId PK
+        TIMESTAMP Created
+        BOOLEAN IsPublic
+        VARCHAR UserName FK
+        VARCHAR Name
+        VARCHAR Description
+    }
+
+    class PlaylistTracks {
+        INT RecordId PK
+        INT PlayListId FK
+        VARCHAR Track_Id FK
+        INT Position
+    }
+
+```
