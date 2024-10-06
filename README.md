@@ -10,7 +10,6 @@ Features we plan to deliver this semester
 
 ```mermaid
 classDiagram
-    classDiagram
 
     Tracks --o Albums
     Tracks --o Genres
