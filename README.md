@@ -26,7 +26,7 @@ classDiagram
     User o-- Track_Moods
     User o-- Playlists
     User o-- Comment
-    User o-- User_Preference
+    User "1" o-- "*" User_Preference
     User o-- Listening_History
     User o-- User_Track_Interaction
     Occasions o-- Track_Occasions
@@ -35,7 +35,7 @@ classDiagram
 
     
     class Track{
-        track_id : String (PK)
+        track_id : Integer (PK)
         track_name : String
         album_id : Integer (FK)
         popularity: String
@@ -52,7 +52,7 @@ classDiagram
         valence : decimal
         tempo : decimal
         time_signature : Integer
-        track_genre : String
+        track_genre : Integer
     }
     class Album{
         album_id : Integer(PK)
@@ -99,6 +99,7 @@ classDiagram
         is_public : boolean
     }
     class Playlist_Tracks{
+        recorid_id : Integer(PK)
         playlist_id : Integer(FK)
         track_id : Integer (FK)
         position : Integer
@@ -118,6 +119,7 @@ classDiagram
         weight
     }
     class Listening_History{
+        history_id : Integer (PK)
         user_id : String (FK)
         track_id : Integer (FK)
         last_listened_time : timestamp
@@ -143,5 +145,6 @@ classDiagram
         track_id : Integer (FK)
         occasion_id : Integer (FK)
     }
+
 
 ```
