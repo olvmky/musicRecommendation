@@ -35,116 +35,117 @@ classDiagram
 
     
     class Track{
-        track_id : Integer (PK)
-        track_name : String
-        album_id : Integer (FK)
-        popularity: String
-        duration_ms : decimal
-        explicit : boolean
-        danceability : decimal
-        energy : decimal
-        key : Integer
-        loudness : decimal
-        mode : Integer
-        speechiness : decimal
-        acousticness : decimal
-        instrumentalness : decimal
-        valence : decimal
-        tempo : decimal
-        time_signature : Integer
-        track_genre : Integer
+        TrackId : Integer (PK)
+        TrackName : String
+        AlbumId : Integer (FK)
+        Popularity: Integer
+        DurationMs : decimal
+        Explicit : boolean
+        Danceability : decimal
+        Energy : decimal
+        Key : Integer
+        Loudness : decimal
+        Mode : Integer
+        Speechiness : decimal
+        Acousticness : decimal
+        Instrumentalness : decimal
+        Valence : decimal
+        Tempo : decimal
+        TimeSignature : Integer
+        TrackGenre : Integer
     }
     class Album{
-        album_id : Integer(PK)
-        album_name : String
-        artist_id : Integer (FK)
+        AlbumId : Integer(PK)
+        AlbumName : String
+        ArtistId : Integer (FK)
     }
     class Artists{
-        artist_id : Integer (PK)
-        artist_name : String
+        ArtistId : Integer (PK)
+        ArtistName : String
     }
     class User{
-        user_id : String
-        username : String
-        email : String
-        password_hash : String
-        date_join : timestamp
-        last_login: timestamp
+        UserId : String
+        Username : String
+        Email : String
+        PasswordHash : String
+        DateJoin : timestamp
+        LastLogin: timestamp
     }
     class Genres{
-        genre_id : Integer (PK)
-        genre_name : String
+        GenreId : Integer (PK)
+        GenreName : String
     }
     class Track_Genres{
-        track_id : Integer (FK)
-        genre_id : Integer (FK)
+        TrackId : Integer (FK)
+        GenreId : Integer (FK)
     }
     class Moods{
-        mood_id : Integer (PK)
-        mood_name : String
-        emoji : String
+        MoodId : Integer (PK)
+        MoodName : String
+        Emoji : String
     }
     class Track_Moods{
-        track_id : Integer (FK)
-        mood_id : Integer (FK)
-        user_id : String (FK)
-        tag_date : timestamp
+        TrackId : Integer (FK)
+        MoodId : Integer (FK)
+        UserId : String (FK)
+        TagDate : timestamp
     }
     class Playlists{
-        playlist_id : Integer(PK)
-        user_id : String (FK)
-        name : String
-        description : String
-        creation_date : datetime
-        is_public : boolean
+        PlaylistId : Integer(PK)
+        UserId : String (FK)
+        Name : String
+        Description : String
+        CreationDate : datetime
+        IsPublic : boolean
     }
     class Playlist_Tracks{
-        recorid_id : Integer(PK)
-        playlist_id : Integer(FK)
-        track_id : Integer (FK)
-        position : Integer
+        RecoridId : Integer(PK)
+        PlaylistId : Integer(FK)
+        TrackId : Integer (FK)
+        Position : Integer
     }
     class Comment{
-        comment_id : Integer (PK)
-        user_id : Integer (FK)
-        content_type : enum(TRACK, PLAYLIST)
-        content_id : Integer(FK)
-        comment_text : String
-        comment_time : timestamp
+        CommentId : Integer (PK)
+        UserId : Integer (FK)
+        ContentType : enum(TRACK, PLAYLIST)
+        ContentId : Integer(FK)
+        CommentText : String
+        CommentTime : timestamp
     }
     class User_Preference{
-        user_id : String (FK)
-        preference_type : String
-        preference_id : Integer
-        weight
+        UserId : String (FK)
+        PreferenceType : String
+        PreferenceId : Integer
+        Weight
     }
     class Listening_History{
-        history_id : Integer (PK)
-        user_id : String (FK)
-        track_id : Integer (FK)
-        last_listened_time : timestamp
-        duration_listened : decimal
+        HistoryId : Integer (PK)
+        UserId : String (FK)
+        TrackId : Integer (FK)
+        LastListenedTime : timestamp
+        DurationListened : decimal
     }
     class User_Track_Interaction{
-        user_id : String (FK)
-        track_id : Integer(FK)
-        interaction_type : enum(LIKE, DISLIKE, SKIP)
-        interaction_time : timestamp
+        TserId : String (FK)
+        TrackId : Integer(FK)
+        InteractionType : enum(LIKE, DISLIKE, SKIP)
+        InteractionTime : timestamp
     }
     class Monthly_Track_Popularity{
-        track_id : Integer (FK)
-        year_month : String
-        total_plays : Integer
-        unique_listeners : Integer
+        TrackId : Integer (FK)
+        YearMonth : String
+        TotalPlays : Integer
+        UniqueListeners : Integer
     }
     class Occasions{
-        occasion_id : Integer (PK)
-        occasion_name : String
+        OccasionTd : Integer (PK)
+        OccasionName : String
     }
     class Track_Occasions{
-        track_id : Integer (FK)
-        occasion_id : Integer (FK)
+        TrackId : Integer (FK)
+        OccasionId : Integer (FK)
     }
+
 
 
 ```
