@@ -10,245 +10,124 @@ Features we plan to deliver this semester
 
 ```mermaid
 classDiagram
-    
-    Track o-- Album
-    Track o-- Track_Genres
-    Track o-- Track_Moods
-    Track o-- Playlist_Tracks
-    Track o-- Comment
-    Track o-- Listening_History
-    Track o-- User_Track_Interaction
-    Track o-- Monthly_Track_Popularity
-    Track o-- Track_Occasions
-    Album o-- Artists
-    Genres o-- Track_Genres
-    Moods o-- Track_Moods
-    User o-- Track_Moods
-    User o-- Playlists
-    User o-- Comment
-    User "1" o-- "*" User_Preference
-    User o-- Listening_History
-    User o-- User_Track_Interaction
-    Occasions o-- Track_Occasions
-    Playlists o-- Playlist_Tracks
-    Playlists o-- Comment
+    classDiagram
 
-    
-    class Track{
-        TrackId : Integer (PK)
+    Tracks --o Albums
+    Tracks --o Genres
+    TrackArtists --* Tracks
+    TrackArtists --* Artists
+    Comments --o Users
+    Comments --* Tracks
+    LikeAndDislike --o Users
+    LikeAndDislike --* Tracks
+    MoodTag --o Users
+    MoodTag --* Tracks
+    ListeningHistory --* Users
+    ListeningHistory --* Tracks
+    Playlists --o Users
+    PlaylistTracks --* Tracks
+    PlaylistTracks --* Playlists
+
+
+    class Albums{
+        AlbumId : Integer (PK)
+        AlbumName : String
+    }
+
+    class Genres{
+        GenreId : Integer (PK)
+        GenreName : String
+    }
+ 
+    class Tracks{
+        TrackId : String (PK)
         TrackName : String
         AlbumId : Integer (FK)
+        GenreId : Integer (FK)
+        
         Popularity: Integer
         DurationMs : decimal
         Explicit : boolean
         Danceability : decimal
         Energy : decimal
-        Key : Integer
+        Pitch : Integer
         Loudness : decimal
-        Mode : Integer
+        Modality : Integer
         Speechiness : decimal
         Acousticness : decimal
         Instrumentalness : decimal
         Valence : decimal
         Tempo : decimal
         TimeSignature : Integer
-        TrackGenre : Integer
     }
-    class Album{
-        AlbumId : Integer(PK)
-        AlbumName : String
-        ArtistId : Integer (FK)
-    }
+    
     class Artists{
         ArtistId : Integer (PK)
         ArtistName : String
     }
-    class User{
-        UserId : String
-        Username : String
+
+    class TrackArtists{
+        RelationId : Integer (PK)
+        TrackId : String (FK)
+        AritistId : Integer (FK)
+    }
+
+    class Users{
+        UserName : String (PK)
+        Password : String
+        FirstName : String
+        LastName : String
         Email : String
-        PasswordHash : String
-        DateJoin : timestamp
-        LastLogin: timestamp
+        Phone : String
     }
-    class Genres{
-        GenreId : Integer (PK)
-        GenreName : String
+
+    class Comments{
+        CommentId : Integer (PK)
+        Created : timestamp
+        Content : String
+        UserName : String (FK)
+        TrackId : String (FK)
     }
-    class Track_Genres{
-        TrackId : Integer (FK)
-        GenreId : Integer (FK)
+
+    class LikeAndDislike{
+        ReviewId : Integer (PK)
+        Created : timestamp
+        LikeOrDisklike : boolean
+        TrackId : String (FK)
+        UserName : String (FK)
     }
-    class Moods{
+
+    class MoodTag{
         MoodId : Integer (PK)
-        MoodName : String
-        Emoji : String
+        Mood : enum ('HAPPY','SAD','RELAXED','EXCITED','ROMANTIC','ANGRY')
+        TrackId : String (FK)
+        UserName : String (FK)
     }
-    class Track_Moods{
+
+    class ListeningHistory{
+        HistoryId : Integer (PK)
+        Created : timestamp
+        TimeListened : decimal
+        Duration : decimal
         TrackId : Integer (FK)
-        MoodId : Integer (FK)
-        UserId : String (FK)
-        TagDate : timestamp
+        UserName : String (FK)
     }
+ 
     class Playlists{
         PlaylistId : Integer(PK)
-        UserId : String (FK)
+        Created : timestamp
+        IsPublic : boolean
+        UserName : String (FK)
         Name : String
         Description : String
-        CreationDate : datetime
-        IsPublic : boolean
     }
-    class Playlist_Tracks{
+
+    class PlaylistTracks{
         RecoridId : Integer(PK)
         PlaylistId : Integer(FK)
         TrackId : Integer (FK)
         Position : Integer
     }
-    class Comment{
-        CommentId : Integer (PK)
-        UserId : Integer (FK)
-        ContentType : enum(TRACK, PLAYLIST)
-        ContentId : Integer(FK)
-        CommentText : String
-        CommentTime : timestamp
-    }
-    class User_Preference{
-        UserId : String (FK)
-        PreferenceType : String
-        PreferenceId : Integer
-        Weight
-    }
-    class Listening_History{
-        HistoryId : Integer (PK)
-        UserId : String (FK)
-        TrackId : Integer (FK)
-        LastListenedTime : timestamp
-        DurationListened : decimal
-    }
-    class User_Track_Interaction{
-        TserId : String (FK)
-        TrackId : Integer(FK)
-        InteractionType : enum(LIKE, DISLIKE, SKIP)
-        InteractionTime : timestamp
-    }
-    class Monthly_Track_Popularity{
-        TrackId : Integer (FK)
-        YearMonth : String
-        TotalPlays : Integer
-        UniqueListeners : Integer
-    }
-    class Occasions{
-        OccasionTd : Integer (PK)
-        OccasionName : String
-    }
-    class Track_Occasions{
-        TrackId : Integer (FK)
-        OccasionId : Integer (FK)
-    }
-
-
-
-```
-
-```mermaid
-classDiagram
-
-    class Albums {
-        INT AlbumId PK
-        VARCHAR AlbumName
-    }
-
-    class Genres {
-        INT GenreId PK
-        VARCHAR GenreName
-    }
-
-    class Tracks {
-        VARCHAR TrackId PK
-        VARCHAR TrackName
-        INT AlbumId FK
-        INT GenreId FK
-        INT Popularity
-        DECIMAL DurationMs
-        BOOLEAN Explicit
-        DECIMAL Danceability
-        DECIMAL Energy
-        INT Pitch
-        DECIMAL Loudness
-        INT Modality
-        DECIMAL Speechiness
-        DECIMAL Acousticness
-        DECIMAL Instrumentalness
-        DECIMAL Valence
-        DECIMAL Tempo
-        INT TimeSignature
-    }
-
-    class Artists {
-        INT ArtistId PK
-        VARCHAR ArtistName
-    }
-
-    class TrackArtists {
-        VARCHAR TrackId PK FK
-        INT ArtistId PK FK
-    }
-
-    class Users {
-        VARCHAR UserName PK
-        VARCHAR Password
-        VARCHAR FirstName
-        VARCHAR LastName
-        VARCHAR Email
-        VARCHAR Phone
-    }
-
-    class Comments {
-        INT CommentId PK
-        TIMESTAMP Created
-        VARCHAR Content
-        VARCHAR UserName FK
-        VARCHAR TrackId FK
-    }
-
-    class LikeAndDislike {
-        INT ReviewId PK
-        TIMESTAMP Created
-        BOOLEAN LikeOrDislike
-        VARCHAR TrackId FK
-        VARCHAR UserName FK
-    }
-
-    class MoodTag {
-        INT MoodId PK
-        ENUM Mood
-        VARCHAR TrackId FK
-        VARCHAR UserName FK
-    }
-
-    class ListeningHistory {
-        INT HistoryId PK
-        TIMESTAMP Created
-        INT TimesListened
-        INT Duration
-        VARCHAR TrackId FK
-        VARCHAR UserName FK
-    }
-
-    class PlayLists {
-        INT PlayListId PK
-        TIMESTAMP Created
-        BOOLEAN IsPublic
-        VARCHAR UserName FK
-        VARCHAR Name
-        VARCHAR Description
-    }
-
-    class PlaylistTracks {
-        INT RecordId PK
-        INT PlayListId FK
-        VARCHAR Track_Id FK
-        INT Position
-    }
-
+    
+    
 ```
