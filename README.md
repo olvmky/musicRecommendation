@@ -45,7 +45,7 @@ classDiagram
         GenreId : Integer (FK)
         
         Popularity: Integer
-        DurationMs : decimal
+        DurationMs : Integer
         Explicit : boolean
         Danceability : decimal
         Energy : decimal
@@ -55,6 +55,7 @@ classDiagram
         Speechiness : decimal
         Acousticness : decimal
         Instrumentalness : decimal
+        Liveness : decimal
         Valence : decimal
         Tempo : decimal
         TimeSignature : Integer
