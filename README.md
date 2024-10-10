@@ -11,21 +11,21 @@ Features we plan to deliver this semester
 ```mermaid
 classDiagram
 
-    Tracks --o Albums
-    Tracks --o Genres
-    TrackArtists --* Tracks
-    TrackArtists --* Artists
-    Comments --o Users
-    Comments --* Tracks
-    LikeAndDislike --o Users
-    LikeAndDislike --* Tracks
-    MoodTag --o Users
-    MoodTag --* Tracks
-    ListeningHistory --* Users
-    ListeningHistory --* Tracks
-    Playlists --o Users
-    PlaylistTracks --* Tracks
-    PlaylistTracks --* Playlists
+    Tracks "1..*" --o "1" Albums:has-a
+    Tracks "1" --o "1" Genres:has-a
+    TrackArtists "1..*" --* "1" Tracks:has-a/part-of
+    TrackArtists "1..*" --* "1" Artists:has-a/part-of
+    Comments "1..*" --o "1" Users:has-a
+    Comments "1..*" --* "1" Tracks:has-a/part-of
+    LikeAndDislike "1..*" --o "1" Users:has-a
+    LikeAndDislike "1..*" --* "1" Tracks:has-a/part-of
+    MoodTag "1..*" --o "1" Users:has-a
+    MoodTag "1..*" --* "1" Tracks:has-a/part-of
+    ListeningHistory "1..*" --* "1" Users:has-a/part-of
+    ListeningHistory "1..*" --* "1" Tracks:has-a/part-of
+    Playlists "1..*" --o "1" Users:has-a
+    PlaylistTracks "1..*" --* "1" Tracks:has-a/part-of
+    PlaylistTracks "1..*" --* "1" Playlists:has-a/part-of
 
 
     class Albums{
@@ -128,6 +128,4 @@ classDiagram
         TrackId : Integer (FK)
         Position : Integer
     }
-    
-    
 ```
