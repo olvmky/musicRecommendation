@@ -10,21 +10,21 @@ Features we plan to deliver this semester
 
 ```mermaid
 classDiagram
-    Tracks "1..*" --o "1" Albums:has-a
-    Tracks "1" --o "1" Genres:has-a
-    TrackArtists "1..*" --* "1" Tracks:has-a/part-of
-    TrackArtists "1..*" --* "1" Artists:has-a/part-of
-    Comments "1..*" --o "0..1" Users:has-a
-    Comments "1..*" --* "0..1" Tracks:has-a/part-of
-    LikeAndDislike "1..*" --o "1" Users:has-a
-    LikeAndDislike "1..*" --* "1" Tracks:has-a/part-of
-    MoodTag "1..*" --o "0..1" Users:has-a
-    MoodTag "1..*" --* "0..1" Tracks:has-a/part-of
-    ListeningHistory "1..*" --* "1" Users:has-a/part-of
-    ListeningHistory "1..*" --* "1" Tracks:has-a/part-of
-    Playlists "1..*" --o "0..1" Users:has-a
-    PlaylistTracks "1..*" --* "1" Tracks:has-a/part-of
-    PlaylistTracks "1..*" --* "1" Playlists:has-a/part-of
+    Tracks "*" --o "0..1" Albums:has-a
+    Tracks "*" --o "0..1" Genres:has-a
+    TrackArtists "*" --* "1" Tracks:has-a/part-of
+    TrackArtists "*" --* "1" Artists:has-a/part-of
+    Comments "*" --o "0..1" Users:has-a
+    Comments "*" --* "1" Tracks:has-a/part-of
+    LikeAndDislike "*" --o "0..1" Users:has-a
+    LikeAndDislike "*" --* "1" Tracks:has-a/part-of
+    MoodTag "*" --o "0..1" Users:has-a
+    MoodTag "*" --* "1" Tracks:has-a/part-of
+    ListeningHistory "*" --* "1" Users:has-a/part-of
+    ListeningHistory "*" --* "1" Tracks:has-a/part-of
+    Playlists "*" --o "0..1" Users:has-a
+    PlaylistTracks "*" --* "1" Tracks:has-a/part-of
+    PlaylistTracks "*" --* "1" Playlists:has-a/part-of
 
     class Albums{
         AlbumId : Integer (PK)
