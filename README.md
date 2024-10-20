@@ -1,3 +1,12 @@
+#Weekly Meeting Info:
+***2024.10.19***
+Google doc for Milestone 3:
+https://docs.google.com/document/d/1rxmcF5qIVdv-JYiQAiHzra_2inFbPHvl1sFKnkglwps/edit?pli=1&tab=t.0
+
+For converting data:
+https://mockaroo.com
+
+------
 # Music Recommendation
 SoundWave is a personalized music platform that offers mood-based playlists, dynamic music discovery, and real-time social interaction, catering to music lovers seeking more tailored recommendations, interactive features, and evolving playlists beyond the limitations of traditional services.
  
