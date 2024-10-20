@@ -1,6 +1,6 @@
 # Weekly Meeting Info:
 <br>
-***2024.10.19***
+###2024.10.19<br>
 Google doc for Milestone 3:<br>
 https://docs.google.com/document/d/1rxmcF5qIVdv-JYiQAiHzra_2inFbPHvl1sFKnkglwps/edit?pli=1&tab=t.0<br>
 <br>
