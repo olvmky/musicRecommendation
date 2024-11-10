@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="BlogApplication/BlogApplication/src/main/java"/>
+	<classpathentry kind="lib" path="BlogApplication/__MACOSX/BlogApplication/build/classes/main/webapp/WEB-INF/lib/._mysql-connector-j-9.1.0.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/__MACOSX/BlogApplication/build/classes/main/webapp/WEB-INF/lib/._taglibs-standard-impl-1.2.5.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/__MACOSX/BlogApplication/build/classes/main/webapp/WEB-INF/lib/._taglibs-standard-spec-1.2.5.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/__MACOSX/BlogApplication/src/main/webapp/WEB-INF/lib/._mysql-connector-j-9.1.0.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/__MACOSX/BlogApplication/src/main/webapp/WEB-INF/lib/._taglibs-standard-impl-1.2.5.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/__MACOSX/BlogApplication/src/main/webapp/WEB-INF/lib/._taglibs-standard-spec-1.2.5.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/BlogApplication/src/main/webapp/WEB-INF/lib/mysql-connector-j-9.1.0.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/BlogApplication/src/main/webapp/WEB-INF/lib/taglibs-standard-impl-1.2.5.jar"/>
+	<classpathentry kind="lib" path="BlogApplication/BlogApplication/src/main/webapp/WEB-INF/lib/taglibs-standard-spec-1.2.5.jar"/>
+	<classpathentry kind="output" path="BlogApplication/BlogApplication/build/classes"/>
+</classpath>
