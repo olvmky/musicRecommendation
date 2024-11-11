@@ -28,11 +28,11 @@ public class MoodTagDao {
     }
 
     // SQL statements
-    private static final String INSERT_MOOD_TAG = "INSERT INTO MoodTag(MoodName, TrackId) VALUES(?,?);";
-    private static final String SELECT_MOOD_TAG = "SELECT MoodTagId, MoodName, TrackId FROM MoodTag WHERE MoodTagId=?;";
-    private static final String SELECT_MOOD_TAG_BY_TRACK = "SELECT MoodTagId, MoodName, TrackId FROM MoodTag WHERE TrackId=?;";
+    private static final String INSERT_MOOD_TAG = "INSERT INTO MoodTag(MoodName, TrackId, UserName) VALUES(?,?,?);";
+    private static final String SELECT_MOOD_TAG = "SELECT MoodTagId, MoodName, TrackId, UserName FROM MoodTag WHERE MoodTagId=?;";
+    private static final String SELECT_MOOD_TAG_BY_TRACK = "SELECT MoodTagId, MoodName, TrackId, UserName FROM MoodTag WHERE TrackId=?;";
     private static final String DELETE_MOOD_TAG = "DELETE FROM MoodTag WHERE MoodTagId=?;";
-    
+
     // Create a new MoodTag record
     public MoodTag create(MoodTag moodTag) throws SQLException {
         Connection connection = null;
@@ -41,8 +41,9 @@ public class MoodTagDao {
         try {
             connection = connectionManager.getConnection();
             insertStmt = connection.prepareStatement(INSERT_MOOD_TAG, Statement.RETURN_GENERATED_KEYS);
-            insertStmt.setString(1, moodTag.getMoodName());
+            insertStmt.setString(1, moodTag.getMood().name());  // Store enum as string
             insertStmt.setString(2, moodTag.getTrackId());
+            insertStmt.setString(3, moodTag.getUserName());
             insertStmt.executeUpdate();
 
             resultKey = insertStmt.getGeneratedKeys();
@@ -76,9 +77,12 @@ public class MoodTagDao {
             results = selectStmt.executeQuery();
 
             if (results.next()) {
+                int resultId = results.getInt("MoodTagId");
                 String moodName = results.getString("MoodName");
+                MoodTag.Mood mood = MoodTag.Mood.valueOf(moodName); // Convert string back to enum
                 String trackId = results.getString("TrackId");
-                return new MoodTag(moodTagId, moodName, trackId);
+                String userName = results.getString("UserName");
+                return new MoodTag(resultId, mood, trackId, userName);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -92,4 +96,52 @@ public class MoodTagDao {
     }
 
     // Retrieve MoodTags by track ID
-    public List<MoodTag> getMoodTagsByTrackId(String trackId) throws SQLException
+    public List<MoodTag> getMoodTagsByTrackId(String trackId) throws SQLException {
+        List<MoodTag> moodTags = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(SELECT_MOOD_TAG_BY_TRACK);
+            selectStmt.setString(1, trackId);
+            results = selectStmt.executeQuery();
+
+            while (results.next()) {
+                int resultId = results.getInt("MoodTagId");
+                String moodName = results.getString("MoodName");
+                MoodTag.Mood mood = MoodTag.Mood.valueOf(moodName); // Convert string back to enum
+                String userName = results.getString("UserName");
+                moodTags.add(new MoodTag(resultId, mood, trackId, userName));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) connection.close();
+            if (selectStmt != null) selectStmt.close();
+            if (results != null) results.close();
+        }
+        return moodTags;
+    }
+
+    // Delete a MoodTag record
+    public void delete(MoodTag moodTag) throws SQLException {
+        Connection connection = null;
+        PreparedStatement deleteStmt = null;
+        try {
+            connection = connectionManager.getConnection();
+            deleteStmt = connection.prepareStatement(DELETE_LISTENING_HISTORY);
+            deleteStmt.setInt(1, moodTag.getMoodTagId());
+            deleteStmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) connection.close();
+            if (deleteStmt != null) deleteStmt.close();
+        }
+    }
+}
+
+

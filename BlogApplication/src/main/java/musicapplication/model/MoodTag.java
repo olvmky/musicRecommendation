@@ -4,21 +4,26 @@ package musicapplication.model;
  * Represents a mood tag associated with a track in the music application.
  */
 public class MoodTag {
-    private int moodId;
-    private String mood;
+    private int moodTagId;
+    private Mood mood;  // Enum for mood
     private String trackId;
     private String userName;
+
+    // Enum for predefined moods
+    public enum Mood {
+        HAPPY, SAD, RELAXED, EXCITED, ROMANTIC, ANGRY
+    }
 
     /**
      * Constructs a new MoodTag object.
      *
-     * @param moodId   The unique identifier for the mood tag.
-     * @param mood     The mood (e.g., HAPPY, SAD, RELAXED, etc.).
-     * @param trackId  The identifier of the track associated with this mood tag.
-     * @param userName The username of the user who tagged the track with a mood.
+     * @param moodTagId The unique identifier for the mood tag.
+     * @param mood      The mood (e.g., HAPPY, SAD, RELAXED, etc.).
+     * @param trackId   The identifier of the track associated with this mood tag.
+     * @param userName  The username of the user who tagged the track with a mood.
      */
-    public MoodTag(int moodId, String mood, String trackId, String userName) {
-        this.moodId = moodId;
+    public MoodTag(int moodTagId, Mood mood, String trackId, String userName) {
+        this.moodTagId = moodTagId;
         this.mood = mood;
         this.trackId = trackId;
         this.userName = userName;
@@ -26,19 +31,19 @@ public class MoodTag {
 
     // Getters and setters
 
-    public int getMoodId() {
-        return moodId;
+    public int getMoodTagId() {
+        return moodTagId;
     }
 
-    public void setMoodId(int moodId) {
-        this.moodId = moodId;
+    public void setMoodTagId(int moodTagId) {
+        this.moodTagId = moodTagId;
     }
 
-    public String getMood() {
+    public Mood getMood() {
         return mood;
     }
 
-    public void setMood(String mood) {
+    public void setMood(Mood mood) {
         this.mood = mood;
     }
 

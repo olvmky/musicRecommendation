@@ -28,12 +28,12 @@ public class ListeningHistoryDao {
     }
 
     // SQL statements
-    private static final String INSERT_LISTENING_HISTORY = "INSERT INTO ListeningHistory(TrackId, UserName, ListeningTime) VALUES(?,?,?);";
-    private static final String SELECT_LISTENING_HISTORY = "SELECT ListeningHistoryId, TrackId, UserName, ListeningTime FROM ListeningHistory WHERE ListeningHistoryId=?;";
-    private static final String SELECT_LISTENING_HISTORY_BY_USER = "SELECT ListeningHistoryId, TrackId, UserName, ListeningTime FROM ListeningHistory WHERE UserName=?;";
-    private static final String SELECT_LISTENING_HISTORY_BY_TRACK = "SELECT ListeningHistoryId, TrackId, UserName, ListeningTime FROM ListeningHistory WHERE TrackId=?;";
+    private static final String INSERT_LISTENING_HISTORY = "INSERT INTO ListeningHistory(TrackId, UserName, ListeningTime, TimesListened, Duration) VALUES(?,?,?,?,?);";
+    private static final String SELECT_LISTENING_HISTORY = "SELECT ListeningHistoryId, TrackId, UserName, ListeningTime, TimesListened, Duration FROM ListeningHistory WHERE ListeningHistoryId=?;";
+    private static final String SELECT_LISTENING_HISTORY_BY_USER = "SELECT ListeningHistoryId, TrackId, UserName, ListeningTime, TimesListened, Duration FROM ListeningHistory WHERE UserName=?;";
+    private static final String SELECT_LISTENING_HISTORY_BY_TRACK = "SELECT ListeningHistoryId, TrackId, UserName, ListeningTime, TimesListened, Duration FROM ListeningHistory WHERE TrackId=?;";
     private static final String DELETE_LISTENING_HISTORY = "DELETE FROM ListeningHistory WHERE ListeningHistoryId=?;";
-    
+
     // Create a new ListeningHistory record
     public ListeningHistory create(ListeningHistory listeningHistory) throws SQLException {
         Connection connection = null;
@@ -44,7 +44,9 @@ public class ListeningHistoryDao {
             insertStmt = connection.prepareStatement(INSERT_LISTENING_HISTORY, Statement.RETURN_GENERATED_KEYS);
             insertStmt.setString(1, listeningHistory.getTrackId());
             insertStmt.setString(2, listeningHistory.getUserName());
-            insertStmt.setTimestamp(3, new Timestamp(listeningHistory.getListeningTime().getTime()));
+            insertStmt.setTimestamp(3, new Timestamp(listeningHistory.getCreated().getTime()));
+            insertStmt.setInt(4, listeningHistory.getTimesListened());
+            insertStmt.setInt(5, listeningHistory.getDuration());
             insertStmt.executeUpdate();
 
             resultKey = insertStmt.getGeneratedKeys();
@@ -54,7 +56,7 @@ public class ListeningHistoryDao {
             } else {
                 throw new SQLException("Unable to retrieve auto-generated key.");
             }
-            listeningHistory.setListeningHistoryId(listeningHistoryId);
+            listeningHistory.setHistoryId(listeningHistoryId);  // Set the auto-generated historyId
             return listeningHistory;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -82,7 +84,9 @@ public class ListeningHistoryDao {
                 String trackId = results.getString("TrackId");
                 String userName = results.getString("UserName");
                 Timestamp listeningTime = results.getTimestamp("ListeningTime");
-                return new ListeningHistory(resultId, trackId, userName, new Date(listeningTime.getTime()));
+                int timesListened = results.getInt("TimesListened");
+                int duration = results.getInt("Duration");
+                return new ListeningHistory(resultId, listeningTime, timesListened, duration, trackId, userName);  // Using full constructor
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -111,7 +115,9 @@ public class ListeningHistoryDao {
                 int resultId = results.getInt("ListeningHistoryId");
                 String trackId = results.getString("TrackId");
                 Timestamp listeningTime = results.getTimestamp("ListeningTime");
-                ListeningHistory history = new ListeningHistory(resultId, trackId, userName, new Date(listeningTime.getTime()));
+                int timesListened = results.getInt("TimesListened");
+                int duration = results.getInt("Duration");
+                ListeningHistory history = new ListeningHistory(resultId, listeningTime, timesListened, duration, trackId, userName);
                 historyList.add(history);
             }
         } catch (SQLException e) {
@@ -126,15 +132,14 @@ public class ListeningHistoryDao {
     }
 
     // Delete a ListeningHistory record
-    public ListeningHistory delete(ListeningHistory listeningHistory) throws SQLException {
+    public void delete(ListeningHistory listeningHistory) throws SQLException {
         Connection connection = null;
         PreparedStatement deleteStmt = null;
         try {
             connection = connectionManager.getConnection();
             deleteStmt = connection.prepareStatement(DELETE_LISTENING_HISTORY);
-            deleteStmt.setInt(1, listeningHistory.getListeningHistoryId());
+            deleteStmt.setInt(1, listeningHistory.getHistoryId());
             deleteStmt.executeUpdate();
-            return null; // Return null after deletion
         } catch (SQLException e) {
             e.printStackTrace();
             throw e;
@@ -144,3 +149,4 @@ public class ListeningHistoryDao {
         }
     }
 }
+

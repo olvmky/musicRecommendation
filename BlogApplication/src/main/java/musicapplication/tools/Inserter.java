@@ -8,7 +8,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 /**
- * A class to demonstrate the CRUD functionality of all models
+ * A class to demonstrate the CRUD functionality of all models.
  */
 public class Inserter {
 
@@ -68,8 +68,7 @@ public class Inserter {
         System.out.println("Updated to dislike");
 
         // Create ListeningHistory entry
-        ListeningHistory listeningHistory = new ListeningHistory(0, "TRACK123", 
-            user.getUserName(), new Timestamp(System.currentTimeMillis()));
+        ListeningHistory listeningHistory = new ListeningHistory(0, new Timestamp(System.currentTimeMillis()), 1, 180, "TRACK123", user.getUserName());
         listeningHistory = listeningHistoryDao.create(listeningHistory);
         System.out.println("Created listening history: " + listeningHistory.getHistoryId());
 
@@ -77,8 +76,8 @@ public class Inserter {
         ListeningHistory retrievedHistory = listeningHistoryDao.getListeningHistoryById(listeningHistory.getHistoryId());
         System.out.println("Retrieved listening history: " + retrievedHistory.getTrackId());
 
-        // Create MoodTag entry
-        MoodTag moodTag = new MoodTag(0, "TRACK123", user.getUserName(), "Happy", new Timestamp(System.currentTimeMillis()));
+        // Create MoodTag entry (using the enum Mood)
+        MoodTag moodTag = new MoodTag(0, MoodTag.Mood.HAPPY, "TRACK123", user.getUserName());
         moodTag = moodTagDao.create(moodTag);
         System.out.println("Created mood tag: " + moodTag.getMoodTagId());
 
@@ -108,3 +107,4 @@ public class Inserter {
         System.out.println("Deleted user");
     }
 }
+
