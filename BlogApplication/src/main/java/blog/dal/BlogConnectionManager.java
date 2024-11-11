@@ -1,4 +1,6 @@
-// Jingtao Han
+/*
+ *  CS 5200 HW4 : Krushna Sanjay Sharma
+ */
 package blog.dal;
 
 import java.sql.Connection;
@@ -32,18 +34,18 @@ import java.util.Properties;
  *   navigate to the Connector/J JAR.
  * 4. Update the "private final" variables below.
  */
-public class ConnectionManager {
+public class BlogConnectionManager {
 
 	// User to connect to your database instance. By default, this is "root2".
 	private final String user = "root";
 	// Password for the user.
-	private final String password = "12345678";
+	private final String password = "Kimmimaru#1";
 	// URI to your database server. If running on the same machine, then this is "localhost".
 	private final String hostName = "localhost";
 	// Port to your database server. By default, this is 3307.
 	private final int port= 3306;
 	// Name of the MySQL schema that contains your tables.
-	private final String schema = "ReviewApplication";
+	private final String schema = "blogapplication";
 	// Default timezone for MySQL server.
 	private final String timezone = "UTC";
 
