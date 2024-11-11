@@ -11,11 +11,11 @@ import blog.model.*;
 
 
 public class PersonsDao {
-	protected ConnectionManager connectionManager;
+	protected BlogConnectionManager connectionManager;
 	
 	private static PersonsDao instance = null;
 	protected PersonsDao() {
-		connectionManager = new ConnectionManager();
+		connectionManager = new BlogConnectionManager();
 	}
 	public static PersonsDao getInstance() {
 		if(instance == null) {

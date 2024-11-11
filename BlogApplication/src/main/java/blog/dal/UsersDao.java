@@ -15,12 +15,12 @@ import blog.model.*;
  * {@link Persons} from MySQL instance.
  */
 public class UsersDao {
-	protected ConnectionManager connectionManager;
+	protected BlogConnectionManager connectionManager;
 	
 	// Single pattern: instantiation is limited to one object.
 	private static UsersDao instance = null;
 	protected UsersDao() {
-		connectionManager = new ConnectionManager();
+		connectionManager = new BlogConnectionManager();
 	}
 	public static UsersDao getInstance() {
 		if(instance == null) {

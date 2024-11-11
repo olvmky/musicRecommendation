@@ -15,11 +15,11 @@ import blog.model.*;
 
 
 public class BlogPostsDao {
-	protected ConnectionManager connectionManager;
+	protected BlogConnectionManager connectionManager;
 
 	private static BlogPostsDao instance = null;
 	protected BlogPostsDao() {
-		connectionManager = new ConnectionManager();
+		connectionManager = new BlogConnectionManager();
 	}
 	public static BlogPostsDao getInstance() {
 		if(instance == null) {

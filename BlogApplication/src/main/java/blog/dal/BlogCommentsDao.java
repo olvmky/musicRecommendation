@@ -14,11 +14,11 @@ import blog.model.*;
 
 
 public class BlogCommentsDao {
-	protected ConnectionManager connectionManager;
+	protected BlogConnectionManager connectionManager;
 
 	private static BlogCommentsDao instance = null;
 	protected BlogCommentsDao() {
-		connectionManager = new ConnectionManager();
+		connectionManager = new BlogConnectionManager();
 	}
 	public static BlogCommentsDao getInstance() {
 		if(instance == null) {

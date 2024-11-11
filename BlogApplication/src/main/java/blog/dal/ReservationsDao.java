@@ -9,11 +9,11 @@ import java.util.List;
 import blog.model.*;
 
 public class ReservationsDao {
-    protected ConnectionManager connectionManager;
+    protected BlogConnectionManager connectionManager;
 
     private static ReservationsDao instance = null;
     protected ReservationsDao() {
-        connectionManager = new ConnectionManager();
+        connectionManager = new BlogConnectionManager();
     }
     public static ReservationsDao getInstance() {
         if(instance == null) {

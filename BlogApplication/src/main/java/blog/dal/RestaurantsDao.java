@@ -12,11 +12,11 @@ import java.util.List;
 import blog.model.*;
 
 public class RestaurantsDao {
-	protected ConnectionManager connectionManager;
+	protected BlogConnectionManager connectionManager;
 
 	private static RestaurantsDao instance = null;
 	protected RestaurantsDao() {
-		connectionManager = new ConnectionManager();
+		connectionManager = new BlogConnectionManager();
 	}
 	public static RestaurantsDao getInstance() {
 		if(instance == null) {

@@ -11,12 +11,12 @@ import blog.model.Companies;
 
 
 public class CompaniesDao {
-    protected ConnectionManager connectionManager;
+    protected BlogConnectionManager connectionManager;
 
     private static CompaniesDao instance = null;
 
     protected CompaniesDao() {
-        connectionManager = new ConnectionManager();
+        connectionManager = new BlogConnectionManager();
     }
 
     public static CompaniesDao getInstance() {

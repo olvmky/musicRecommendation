@@ -8,11 +8,11 @@ import java.util.List;
 import blog.model.*;
 
 public class RecommendationsDao {
-    protected ConnectionManager connectionManager;
+    protected BlogConnectionManager connectionManager;
 
     private static RecommendationsDao instance = null;
     protected RecommendationsDao() {
-        connectionManager = new ConnectionManager();
+        connectionManager = new BlogConnectionManager();
     }
     public static RecommendationsDao getInstance() {
         if(instance == null) {

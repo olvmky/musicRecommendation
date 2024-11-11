@@ -13,11 +13,11 @@ import java.util.List;
 import blog.model.*;
 
 public class CreditCardsDao {
-    protected ConnectionManager connectionManager;
+    protected BlogConnectionManager connectionManager;
     private static CreditCardsDao instance = null;
 
     protected CreditCardsDao() {
-        connectionManager = new ConnectionManager();
+        connectionManager = new BlogConnectionManager();
     }
 
     public static CreditCardsDao getInstance() {

@@ -14,11 +14,11 @@ import java.util.List;
 import blog.model.*;
 
 public class ReviewsDao {
-    protected ConnectionManager connectionManager;
+    protected BlogConnectionManager connectionManager;
 
     private static ReviewsDao instance = null;
     protected ReviewsDao() {
-        connectionManager = new ConnectionManager();
+        connectionManager = new BlogConnectionManager();
     }
     public static ReviewsDao getInstance() {
         if(instance == null) {

@@ -12,11 +12,11 @@ import blog.model.*;
 
 
 public class ResharesDao {
-	protected ConnectionManager connectionManager;
+	protected BlogConnectionManager connectionManager;
 
 	private static ResharesDao instance = null;
 	protected ResharesDao() {
-		connectionManager = new ConnectionManager();
+		connectionManager = new BlogConnectionManager();
 	}
 	public static ResharesDao getInstance() {
 		if(instance == null) {
