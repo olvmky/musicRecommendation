@@ -13,12 +13,12 @@ import java.util.List;
 public class Inserter {
 
     public static void main(String[] args) throws SQLException {
-        // CRUD for Users, Comments, LikeAndDislike, ListeningHistory, MoodTag
-        UsersDao usersDao = new UsersDao();
-        CommentsDao commentsDao = new CommentsDao();
-        LikeAndDislikeDao likeAndDislikeDao = new LikeAndDislikeDao();
-        ListeningHistoryDao listeningHistoryDao = new ListeningHistoryDao();
-        MoodTagDao moodTagDao = new MoodTagDao();
+        // Use Singleton DAOs
+        UsersDao usersDao = UsersDao.getInstance();
+        CommentsDao commentsDao = CommentsDao.getInstance();
+        LikeAndDislikeDao likeAndDislikeDao = LikeAndDislikeDao.getInstance();
+        ListeningHistoryDao listeningHistoryDao = ListeningHistoryDao.getInstance();
+        MoodTagDao moodTagDao = MoodTagDao.getInstance();
 
         // Create a user
         Users user = new Users("johndoe", "password123", "John", "Doe", "john@example.com", "1234567890");
@@ -107,4 +107,5 @@ public class Inserter {
         System.out.println("Deleted user");
     }
 }
+
 
