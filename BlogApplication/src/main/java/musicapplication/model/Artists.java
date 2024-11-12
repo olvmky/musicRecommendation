@@ -1,3 +1,5 @@
+package musicapplication.model;
+
 public class Artists {
     private int artistId;
     private String artistName;

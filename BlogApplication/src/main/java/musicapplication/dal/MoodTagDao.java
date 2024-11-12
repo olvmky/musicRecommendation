@@ -131,7 +131,7 @@ public class MoodTagDao {
         PreparedStatement deleteStmt = null;
         try {
             connection = connectionManager.getConnection();
-            deleteStmt = connection.prepareStatement(DELETE_LISTENING_HISTORY);
+            deleteStmt = connection.prepareStatement(DELETE_MOOD_TAG);
             deleteStmt.setInt(1, moodTag.getMoodTagId());
             deleteStmt.executeUpdate();
         } catch (SQLException e) {
