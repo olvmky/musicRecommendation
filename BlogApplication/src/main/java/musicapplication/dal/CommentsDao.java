@@ -12,6 +12,7 @@ import java.util.List;
  * @author Krushna Sanjay Sharma
  */
 public class CommentsDao {
+	private static volatile CommentsDao instance;
 	private ConnectionManager connectionManager;
 
 	// SQL statement constants
@@ -32,9 +33,24 @@ public class CommentsDao {
 	/**
 	 * Constructor for CommentsDao.
 	 */
-	public CommentsDao() {
+	private CommentsDao() {
 		connectionManager = new ConnectionManager();
 	}
+	
+	/**
+	 * Get single instance for CommentsDao
+	 * @return the singleton instance
+	 */
+	public static CommentsDao getInstance() {
+        if (instance == null) {
+            synchronized (CommentsDao.class) {
+                if (instance == null) {
+                    instance = new CommentsDao();
+                }
+            }
+        }
+        return instance;
+    }
 
 	/**
 	 * Create a new comment in the database.

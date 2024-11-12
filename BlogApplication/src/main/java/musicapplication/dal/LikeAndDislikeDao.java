@@ -12,6 +12,7 @@ import java.util.List;
  * @author Krushna Sanjay Sharma
  */
 public class LikeAndDislikeDao {
+	private static volatile LikeAndDislikeDao instance;
 	private ConnectionManager connectionManager;
 
 	// SQL statement constants
@@ -32,9 +33,25 @@ public class LikeAndDislikeDao {
 	/**
 	 * Constructor for LikeAndDislikeDao.
 	 */
-	public LikeAndDislikeDao() {
+	private LikeAndDislikeDao() {
 		connectionManager = new ConnectionManager();
 	}
+	
+	
+	/**
+	 * Get single instance for LikeAndDislikeDao
+	 * @return the singleton instance
+	 */
+	public static LikeAndDislikeDao getInstance() {
+        if (instance == null) {
+            synchronized (LikeAndDislikeDao.class) {
+                if (instance == null) {
+                    instance = new LikeAndDislikeDao();
+                }
+            }
+        }
+        return instance;
+    }
 
 	/**
 	 * Create a new like or dislike in the database.

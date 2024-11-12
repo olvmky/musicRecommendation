@@ -10,6 +10,7 @@ import java.sql.*;
  * @author Krushna Sanjay Sharma
  */
 public class UsersDao {
+	private static volatile UsersDao instance;
 	private ConnectionManager connectionManager;
 
 	// SQL statement constants
@@ -27,11 +28,26 @@ public class UsersDao {
 	private static final String COLUMN_PHONE = "Phone";
 
 	/**
-	 * Constructor for UsersDao.
+	 * Private constructor for Singleton UsersDao.
 	 */
-	public UsersDao() {
+	private UsersDao() {
 		connectionManager = new ConnectionManager();
 	}
+	
+	/**
+	 * Get singleton instance for UsersDao 
+	 * @return the singleton instance
+	 */
+    public static UsersDao getInstance() {
+        if (instance == null) {
+            synchronized (UsersDao.class) {
+                if (instance == null) {
+                    instance = new UsersDao();
+                }
+            }
+        }
+        return instance;
+    }
 
 	/**
 	 * Create a new user in the database.
