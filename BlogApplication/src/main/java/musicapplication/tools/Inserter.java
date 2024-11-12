@@ -19,6 +19,8 @@ public class Inserter {
         LikeAndDislikeDao likeAndDislikeDao = LikeAndDislikeDao.getInstance();
         ListeningHistoryDao listeningHistoryDao = ListeningHistoryDao.getInstance();
         MoodTagDao moodTagDao = MoodTagDao.getInstance();
+        ArtistsDao artistsDao = ArtistsDao.getInstance();
+        TrackArtistsDao trackArtistsDao = TrackArtistsDao.getInstance();
 
         // Create a user
         Users user = new Users("johndoe", "password123", "John", "Doe", "john@example.com", "1234567890");
@@ -105,7 +107,75 @@ public class Inserter {
 
         usersDao.delete(retrievedUser);
         System.out.println("Deleted user");
+        
+        
+        // Artists
+        // Create artists
+        Artists artist1 = new Artists(1, "Gen Hoshino");
+        artist1 = artistsDao.create(artist1);
+        System.out.println("Created artist: " + artist1.getArtistName());
+
+        Artists artist2 = new Artists(2, "Ben Woodward");
+        artist2 = artistsDao.create(artist2);
+        System.out.println("Created artist: " + artist2.getArtistName());
+
+        // Retrieve the artist by ID
+        Artists retrievedArtist1 = artistsDao.getArtistById(artist1.getArtistId());
+        System.out.println("Retrieved artist by ID: " + retrievedArtist1.getArtistName());
+
+        Artists retrievedArtist2 = artistsDao.getArtistById(artist2.getArtistId());
+        System.out.println("Retrieved artist by ID: " + retrievedArtist2.getArtistName());
+
+        // Retrieve artists by name (case-insensitive search)
+        List<Artists> artistsByName = artistsDao.getArtistsByName("gen");
+        System.out.println("Number of artists found by name 'gen': " + artistsByName.size());
+
+        // Update the artist's name
+        retrievedArtist1.setArtistName("Gen Hoshino - Updated");
+        artistsDao.update(retrievedArtist1);
+        System.out.println("Updated artist name to: " + retrievedArtist1.getArtistName());
+
+        // Retrieve all artists
+        List<Artists> allArtists = artistsDao.getAllArtists();
+        System.out.println("Number of artists in the database: " + allArtists.size());
+
+        // Delete the artists
+        artistsDao.delete(retrievedArtist1);
+        System.out.println("Deleted artist: " + retrievedArtist1.getArtistName());
+
+        artistsDao.delete(retrievedArtist2);
+        System.out.println("Deleted artist: " + retrievedArtist2.getArtistName());
+        
+        
+        // TrackArtists
+        // Create TrackArtist relationships
+        TrackArtists trackArtist1 = new TrackArtists("TRACK123", artist1.getArtistId());
+        trackArtist1 = trackArtistsDao.create(trackArtist1);
+        System.out.println("Created TrackArtist for TrackId: " + trackArtist1.getTrackId() + " and ArtistId: " + trackArtist1.getArtistId());
+
+        TrackArtists trackArtist2 = new TrackArtists("TRACK123", artist2.getArtistId());
+        trackArtist2 = trackArtistsDao.create(trackArtist2);
+        System.out.println("Created TrackArtist for TrackId: " + trackArtist2.getTrackId() + " and ArtistId: " + trackArtist2.getArtistId());
+
+        // Retrieve TrackArtists by TrackId
+        List<TrackArtists> trackArtistsByTrack = trackArtistsDao.getTrackArtistsByTrackId("TRACK123");
+        System.out.println("Number of artists for TrackId 'TRACK123': " + trackArtistsByTrack.size());
+
+        // Retrieve TrackArtists by ArtistId
+        List<TrackArtists> trackArtistsByArtist = trackArtistsDao.getTrackArtistsByArtistId(artist1.getArtistId());
+        System.out.println("Number of tracks for ArtistId '" + artist1.getArtistId() + "': " + trackArtistsByArtist.size());
+
+        // Delete TrackArtist relationships
+        trackArtistsDao.delete(trackArtist1);
+        System.out.println("Deleted TrackArtist for TrackId: " + trackArtist1.getTrackId() + " and ArtistId: " + trackArtist1.getArtistId());
+
+        trackArtistsDao.delete(trackArtist2);
+        System.out.println("Deleted TrackArtist for TrackId: " + trackArtist2.getTrackId() + " and ArtistId: " + trackArtist2.getArtistId());
+
+
     }
+    
+    
 }
 
 
