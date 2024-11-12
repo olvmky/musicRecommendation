@@ -18,14 +18,7 @@ public class ArtistsDao {
     // Connection manager to manage database connections
     protected ConnectionManager connectionManager;
 
-    // SQL statements as constants
-    private static final String INSERT_ARTIST = "INSERT INTO Artists (ArtistName) VALUES (?);";
-    private static final String UPDATE_ARTIST = "UPDATE Artists SET ArtistName=? WHERE ArtistId=?;";
-    private static final String DELETE_ARTIST = "DELETE FROM Artists WHERE ArtistId=?;";
-    private static final String SELECT_ARTIST_BY_ID = "SELECT ArtistId, ArtistName FROM Artists WHERE ArtistId=?;";
-    private static final String SELECT_ALL_ARTISTS = "SELECT ArtistId, ArtistName FROM Artists;";
-    private static final String SELECT_ARTISTS_BY_NAME = "SELECT ArtistId, ArtistName FROM Artists WHERE ArtistName LIKE ?;";
-
+   
     // Private constructor for Singleton pattern
     private ArtistsDao() {
         connectionManager = new ConnectionManager();
@@ -38,6 +31,15 @@ public class ArtistsDao {
         }
         return instance;
     }
+    
+    // SQL statements as constants
+    private static final String INSERT_ARTIST = "INSERT INTO Artists (ArtistName) VALUES (?);";
+    private static final String UPDATE_ARTIST = "UPDATE Artists SET ArtistName=? WHERE ArtistId=?;";
+    private static final String DELETE_ARTIST = "DELETE FROM Artists WHERE ArtistId=?;";
+    private static final String SELECT_ARTIST_BY_ID = "SELECT ArtistId, ArtistName FROM Artists WHERE ArtistId=?;";
+    private static final String SELECT_ALL_ARTISTS = "SELECT ArtistId, ArtistName FROM Artists;";
+    private static final String SELECT_ARTISTS_BY_NAME = "SELECT ArtistId, ArtistName FROM Artists WHERE ArtistName LIKE ?;";
+
 
     /**
      * Create a new Artist in the database.
