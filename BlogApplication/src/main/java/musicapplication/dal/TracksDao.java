@@ -173,4 +173,50 @@ public class TracksDao {
 			if (deleteStmt != null) deleteStmt.close();
 		}
 	}
+	
+	public List<Tracks> getTracksForPlaylist(int playlistId) throws SQLException {
+	    List<Tracks> tracks = new ArrayList<>();
+	    String selectTracks = "SELECT t.* FROM Tracks t JOIN PlaylistTracks pt ON t.TrackId = pt.Track_Id WHERE pt.PlayListId = ? ORDER BY pt.Position;";
+	    Connection connection = null;
+	    PreparedStatement selectStmt = null;
+	    ResultSet results = null;
+	    try {
+	        connection = connectionManager.getConnection();
+	        selectStmt = connection.prepareStatement(selectTracks);
+	        selectStmt.setInt(1, playlistId);
+	        results = selectStmt.executeQuery();
+	        while (results.next()) {
+	            String trackId = results.getString("TrackId");
+	            String trackName = results.getString("TrackName");
+	            int albumId = results.getInt("AlbumId");
+	            int genreId = results.getInt("GenreId");
+	            int popularity = results.getInt("Popularity");
+	            int durationMs = results.getInt("DurationMs");
+	            boolean explicit = results.getBoolean("Explicit");
+	            double danceability = results.getDouble("Danceability");
+	            double energy = results.getDouble("Energy");
+	            int pitch = results.getInt("Pitch");
+	            double loudness = results.getDouble("Loudness");
+	            int modality = results.getInt("Modality");
+	            double speechiness = results.getDouble("Speechiness");
+	            double acousticness = results.getDouble("Acousticness");
+	            double instrumentalness = results.getDouble("Instrumentalness");
+	            double liveness = results.getDouble("Liveness");
+	            double valence = results.getDouble("Valence");
+	            double tempo = results.getDouble("Tempo");
+	            int timeSignature = results.getInt("TimeSignature");
+
+	            Tracks track = new Tracks(trackId, trackName, albumId, genreId, popularity, durationMs, explicit, danceability, energy, pitch, loudness, modality, speechiness, acousticness, instrumentalness, liveness, valence, tempo, timeSignature);
+	            tracks.add(track);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        if (connection != null) connection.close();
+	        if (selectStmt != null) selectStmt.close();
+	        if (results != null) results.close();
+	    }
+	    return tracks;
+	}
 }

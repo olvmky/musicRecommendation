@@ -33,7 +33,7 @@ import blog.model.*;
  * 3. Run the Tomcat server at localhost.
  * 4. Point your browser to http://localhost:8080/BlogApplication/findusers.
  */
-@WebServlet("/findusers")
+@WebServlet("/findusers1")
 public class FindUsers extends HttpServlet {
 	
 	protected BlogUsersDao blogUsersDao;

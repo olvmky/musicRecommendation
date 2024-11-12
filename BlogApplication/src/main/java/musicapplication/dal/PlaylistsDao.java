@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import musicapplication.model.Playlists;
 
@@ -149,5 +151,35 @@ public class PlaylistsDao {
             if (deleteStmt != null) deleteStmt.close();
             if (connection != null) connection.close();
         }
+    }
+    
+    public List<Playlists> getPlaylistsForUser(String userName) throws SQLException {
+        List<Playlists> playlists = new ArrayList<>();
+        String selectPlaylists = "SELECT PlaylistId, Created, IsPublic, UserName, Name FROM Playlists WHERE UserName=?;";
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(selectPlaylists);
+            selectStmt.setString(1, userName);
+            results = selectStmt.executeQuery();
+            while (results.next()) {
+                int playlistId = results.getInt("PlaylistId");
+                Timestamp created = results.getTimestamp("Created");
+                boolean isPublic = results.getBoolean("IsPublic");
+                String name = results.getString("Name");
+                Playlists playlist = new Playlists(playlistId, created, isPublic, userName, name);
+                playlists.add(playlist);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) connection.close();
+            if (selectStmt != null) selectStmt.close();
+            if (results != null) results.close();
+        }
+        return playlists;
     }
 }

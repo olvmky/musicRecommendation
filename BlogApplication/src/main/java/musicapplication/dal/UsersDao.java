@@ -2,6 +2,8 @@ package musicapplication.dal;
 
 import musicapplication.model.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data Access Object (DAO) class to interact with the Users table in the
@@ -186,5 +188,44 @@ public class UsersDao {
 				deleteStmt.close();
 			}
 		}
+	}
+	
+	/**
+	 * Fetch users by firstname or lastname 
+	 * @param name - the pattern to match firstname or lastname of a user 
+	 * @return
+	 * @throws SQLException
+	 */
+	public List<Users> getUsersByName(String name) throws SQLException {
+	    List<Users> users = new ArrayList<>();
+	    String selectUsers = "SELECT UserName, Password, FirstName, LastName, Email, Phone FROM Users WHERE FirstName LIKE ? OR LastName LIKE ?;";
+	    Connection connection = null;
+	    PreparedStatement selectStmt = null;
+	    ResultSet results = null;
+	    try {
+	        connection = connectionManager.getConnection();
+	        selectStmt = connection.prepareStatement(selectUsers);
+	        selectStmt.setString(1, "%" + name + "%");
+	        selectStmt.setString(2, "%" + name + "%");
+	        results = selectStmt.executeQuery();
+	        while (results.next()) {
+	            String userName = results.getString("UserName");
+	            String password = results.getString("Password");
+	            String firstName = results.getString("FirstName");
+	            String lastName = results.getString("LastName");
+	            String email = results.getString("Email");
+	            String phone = results.getString("Phone");
+	            Users user = new Users(userName, password, firstName, lastName, email, phone);
+	            users.add(user);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        if (connection != null) connection.close();
+	        if (selectStmt != null) selectStmt.close();
+	        if (results != null) results.close();
+	    }
+	    return users;
 	}
 }
