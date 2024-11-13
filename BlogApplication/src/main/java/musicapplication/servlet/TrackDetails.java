@@ -18,70 +18,63 @@ import musicapplication.model.*;
 @WebServlet("/trackdetails")
 public class TrackDetails extends HttpServlet {
 
-    protected TracksDao tracksDao;
-    protected MoodTagDao moodTagDao;
-    protected LikeAndDislikeDao likeAndDislikeDao;
-    protected CommentsDao commentsDao;
+	protected TracksDao tracksDao;
+	protected MoodTagDao moodTagDao;
+	protected LikeAndDislikeDao likeAndDislikeDao;
+	protected CommentsDao commentsDao;
+	protected AlbumsDao albumsDao;
+	protected GenresDao genresDao;
 
-    @Override
-    public void init() throws ServletException {
-        tracksDao = TracksDao.getInstance();
-        moodTagDao = MoodTagDao.getInstance();
-        likeAndDislikeDao = LikeAndDislikeDao.getInstance();
-        commentsDao = CommentsDao.getInstance();
-    }
+	@Override
+	public void init() throws ServletException {
+		tracksDao = TracksDao.getInstance();
+		moodTagDao = MoodTagDao.getInstance();
+		likeAndDislikeDao = LikeAndDislikeDao.getInstance();
+		commentsDao = CommentsDao.getInstance();
+		albumsDao = AlbumsDao.getInstance();
+		genresDao = GenresDao.getInstance();
+	}
 
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String trackId = req.getParameter("trackid");
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String trackId = req.getParameter("trackid");
 
-        req.setCharacterEncoding("UTF-8");
-        resp.setCharacterEncoding("UTF-8");
-        resp.setContentType("text/html; charset=UTF-8");
+		if (trackId == null || trackId.trim().isEmpty()) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Track ID is required");
+			return;
+		}
 
-        try {
-            // Fetch track details
-            Tracks track = tracksDao.getTrackById(trackId);
-            if (track == null) {
-                resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Track not found");
-                return;
-            }
+		try {
+			Tracks track = tracksDao.getTrackById(trackId);
+			if (track == null) {
+				resp.sendError(HttpServletResponse.SC_NOT_FOUND, "Track not found");
+				return;
+			}
 
-            // Fetch mood tags for the track
-            List<MoodTag> moodTags = moodTagDao.getMoodTagsByTrackId(trackId);
-            Map<MoodTag.Mood, Integer> moodTagCount = new HashMap<>();
-            for (MoodTag moodTag : moodTags) {
-                moodTagCount.put(moodTag.getMood(), moodTagCount.getOrDefault(moodTag.getMood(), 0) + 1);
-            }
+			String albumName = albumsDao.getAlbumById(track.getAlbumId()).getAlbumName();
+			String genreName = genresDao.getGenreById(track.getGenreId()).getGenreName();
+			List<MoodTag> moodTags = moodTagDao.getMoodTagsByTrackId(trackId);
+			List<LikeAndDislike> likeAndDislikeList = likeAndDislikeDao.getLikeAndDislikeByTrackId(trackId);
+			int likeCount = 0;
+			int dislikeCount = 0;
+			for (LikeAndDislike lad : likeAndDislikeList) {
+				if (lad.isLikeOrDislike()) {
+					likeCount++;
+				} else {
+					dislikeCount++;
+				}
+			}
+			List<Comments> comments = commentsDao.getCommentsByTrackId(trackId);
 
-            // Fetch likes and dislikes for the track
-            List<LikeAndDislike> likeAndDislikeList = likeAndDislikeDao.getLikeAndDislikeByTrackId(trackId);
-            int likeCount = 0;
-            int dislikeCount = 0;
-            for (LikeAndDislike likeAndDislike : likeAndDislikeList) {
-                if (likeAndDislike.equals(true)) {
-                	likeCount++;
-                } else {
-                    dislikeCount++;
-                }
-            }
+			TrackDetailsModel trackDetails = new TrackDetailsModel(track, albumName, genreName, moodTags, likeCount, dislikeCount,
+					comments);
 
-            // Fetch comments for the track
-            List<Comments> comments = commentsDao.getCommentsByTrackId(trackId);
+			req.setAttribute("trackDetails", trackDetails);
+			req.getRequestDispatcher("/TrackDetails.jsp").forward(req, resp);
 
-            // Set attributes to be accessed in the JSP
-            req.setAttribute("track", track);
-            req.setAttribute("moodTags", moodTags);
-            req.setAttribute("moodTagCount", moodTagCount);
-            req.setAttribute("likeCount", likeCount);
-            req.setAttribute("dislikeCount", dislikeCount);
-            req.setAttribute("comments", comments);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new IOException(e);
-        }
-
-        req.getRequestDispatcher("/TrackDetails.jsp").forward(req, resp);
-    }
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
+	}
 }

@@ -99,7 +99,7 @@ body {
 							<td><c:out value="${track.getTrackName()}" /></td>
 							<td><fmt:formatNumber
 									value="${track.getDurationMs() / 60000}" pattern="#0" />: <fmt:formatNumber
-									value="${(track.getDurationMs() % 60000) / 1000}" pattern="00" />
+									value="${track.getDurationMs() % 60000 / 1000}" pattern="00" />
 							</td>
 							<td><span class="star-rating"> <c:forEach begin="1"
 										end="5" var="i">
