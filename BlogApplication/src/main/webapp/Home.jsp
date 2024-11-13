@@ -97,20 +97,23 @@ body {
 								name="tracktitle" placeholder="Enter track title"
 								value="${fn:escapeXml(param.tracktitle)}"> <select
 								class="form-select" id="mood" name="mood"
-								style="max-width: 150px;">
-								<option value="" title="Any">Select mood</option>
-								<option value="HAPPY" ${param.mood == 'HAPPY' ? 'selected' : ''}
-									title="Happy">😊 Happy</option>
-								<option value="SAD" ${param.mood == 'SAD' ? 'selected' : ''}
-									title="Sad">😢 Sad</option>
+								style="max-width: 200px;">
+								<option value="">Any</option>
+								<option value="HAPPY" ${param.mood == 'HAPPY' ? 'selected' : ''}>😊
+									Happy</option>
+								<option value="SAD" ${param.mood == 'SAD' ? 'selected' : ''}>😢
+									Sad</option>
 								<option value="RELAXED"
-									${param.mood == 'RELAXED' ? 'selected' : ''} title="Relaxed">😌 Relaxed</option>
+									${param.mood == 'RELAXED' ? 'selected' : ''}>😌
+									Relaxed</option>
 								<option value="EXCITED"
-									${param.mood == 'EXCITED' ? 'selected' : ''} title="Excited">🤩 Excited</option>
+									${param.mood == 'EXCITED' ? 'selected' : ''}>🤩
+									Excited</option>
 								<option value="ROMANTIC"
-									${param.mood == 'ROMANTIC' ? 'selected' : ''} title="Romantic">❤️ Romantic</option>
-								<option value="ANGRY" ${param.mood == 'ANGRY' ? 'selected' : ''}
-									title="Angry">😠 Angry</option>
+									${param.mood == 'ROMANTIC' ? 'selected' : ''}>❤️
+									Romantic</option>
+								<option value="ANGRY" ${param.mood == 'ANGRY' ? 'selected' : ''}>😠
+									Angry</option>
 							</select>
 							<button class="btn btn-primary" type="submit">Search
 								Tracks</button>
@@ -207,7 +210,14 @@ body {
 											</c:choose>
 										</c:forEach>
 								</span></td>
-								<td><c:out value="${track.isExplicit() ? 'Yes' : 'No'}" /></td>
+								<td><c:choose>
+										<c:when test="${track.isExplicit()}">
+											<span class="badge bg-danger">Explicit</span>
+										</c:when>
+										<c:otherwise>
+											<span class="badge bg-success">Clean</span>
+										</c:otherwise>
+									</c:choose></td>
 								<td><fmt:formatNumber
 										value="${track.getDurationMs() / 60000}" pattern="#0" />:<fmt:formatNumber
 										value="${track.getDurationMs() % 60000 / 1000}" pattern="00" />

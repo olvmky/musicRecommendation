@@ -81,10 +81,10 @@ public class Inserter {
         // Create MoodTag entry (using the enum Mood)
         MoodTag moodTag = new MoodTag(0, MoodTag.Mood.HAPPY, "TRACK123", user.getUserName());
         moodTag = moodTagDao.create(moodTag);
-        System.out.println("Created mood tag: " + moodTag.getMoodTagId());
+        System.out.println("Created mood tag: " + moodTag.getMoodId());
 
         // Retrieve MoodTag by ID
-        MoodTag retrievedMoodTag = moodTagDao.getMoodTagById(moodTag.getMoodTagId());
+        MoodTag retrievedMoodTag = moodTagDao.getMoodTagById(moodTag.getMoodId());
         System.out.println("Retrieved mood tag: " + retrievedMoodTag.getMood());
 
         // Get all mood tags for a track

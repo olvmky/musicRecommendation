@@ -9,7 +9,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SoundWave - User Profile</title>
+<title>SoundWave - Your Musical Journey</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -17,27 +17,54 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
 	rel="stylesheet">
 <style>
-.user-info {
+body {
 	background-color: #f8f9fa;
-	padding: 20px;
-	border-radius: 10px;
+	padding-top: 20px;
 }
 
-.section {
-	margin-top: 30px;
+.profile-card, .section {
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+	margin-bottom: 30px;
+	overflow: hidden;
+}
+
+.section-title {
+	color: #333;
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin: -20px -20px 20px -20px;
+	padding: 10px 20px;
+	background-color: rgba(0, 123, 255, 0.1);
+	border-bottom: 1px solid #eee;
 }
 
 .star-rating {
 	color: #ffc107;
 }
+
+.table-hover tbody tr:hover {
+	background-color: rgba(0, 0, 0, .03);
+}
+
+.table {
+	margin-bottom: 0;
+}
+
+.btn {
+	border-radius: 7px;
+}
 </style>
 </head>
 <body>
-	<div class="container mt-4">
-		<h1 class="mb-4">User Profile</h1>
+	<div class="container">
+		<h1 class="text-center mb-4">Your Musical Journey</h1>
 
-		<div class="user-info">
-			<h2>${user.firstName}${user.lastName}</h2>
+		<div class="profile-card">
+			<h2 class="section-title">${user.firstName} ${user.lastName}'s
+				Profile</h2>
 			<p>
 				<i class="fas fa-user"></i> ${user.userName}
 			</p>
@@ -50,9 +77,9 @@
 		</div>
 
 		<div class="section">
-			<h2>Recommended Tracks</h2>
+			<h3 class="section-title">Curated for you</h3>
 			<div class="table-responsive">
-				<table class="table">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>Track Name</th>
@@ -80,9 +107,9 @@
 		</div>
 
 		<div class="section">
-			<h2>Listening History</h2>
+			<h3 class="section-title">Listening History</h3>
 			<div class="table-responsive">
-				<table class="table">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>Track</th>
@@ -105,9 +132,9 @@
 		</div>
 
 		<div class="section">
-			<h2>Playlists</h2>
+			<h3 class="section-title">Your Playlists</h3>
 			<div class="table-responsive">
-				<table class="table">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>Playlist Name</th>
@@ -120,8 +147,7 @@
 						<c:forEach items="${playlists}" var="playlist">
 							<tr>
 								<td>${playlist.name}</td>
-								<td><fmt:formatDate value="${playlist.created}"
-										pattern="MMM d, yyyy" /></td>
+								<td>${playlist.created}</td>
 								<td><c:choose>
 										<c:when test="${playlist.isPublic}">
 											<span class="badge bg-success">Public</span>

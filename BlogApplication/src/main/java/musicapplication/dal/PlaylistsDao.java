@@ -18,23 +18,22 @@ import musicapplication.model.Playlists;
  * @author Jia Ying Li
  */
 public class PlaylistsDao {
-	protected ConnectionManager connectionManager;
-	private static PlaylistsDao instance = null;
-	protected PlaylistsDao() {
-		connectionManager = new ConnectionManager();
-	}
-	public static PlaylistsDao getInstance() {
-		if(instance == null) {
-			instance = new PlaylistsDao();
-		}
-		return instance;
-	}
-	
-	/**
-     * Create a new Playlist in the database.
-     */
+    protected ConnectionManager connectionManager;
+    private static PlaylistsDao instance = null;
+
+    protected PlaylistsDao() {
+        connectionManager = new ConnectionManager();
+    }
+
+    public static PlaylistsDao getInstance() {
+        if(instance == null) {
+            instance = new PlaylistsDao();
+        }
+        return instance;
+    }
+
     public Playlists create(Playlists playlist) throws SQLException {
-        String insertPlaylist = "INSERT INTO Playlists(Created, IsPublic, UserName, Name) VALUES(?, ?, ?, ?);";
+        String insertPlaylist = "INSERT INTO Playlists(Created, IsPublic, UserName, Name, Description) VALUES(?, ?, ?, ?, ?);";
         Connection connection = null;
         PreparedStatement insertStmt = null;
         ResultSet resultKey = null;
@@ -46,6 +45,7 @@ public class PlaylistsDao {
             insertStmt.setBoolean(2, playlist.isIsPublic());
             insertStmt.setString(3, playlist.getUserName());
             insertStmt.setString(4, playlist.getName());
+            insertStmt.setString(5, playlist.getDescription());
             insertStmt.executeUpdate();
 
             resultKey = insertStmt.getGeneratedKeys();
@@ -65,11 +65,8 @@ public class PlaylistsDao {
         }
     }
 
-    /**
-     * Get a Playlist by its ID.
-     */
     public Playlists getPlaylistById(int playlistId) throws SQLException {
-        String selectPlaylist = "SELECT PlaylistId, Created, IsPublic, UserName, Name FROM Playlists WHERE PlaylistId=?;";
+        String selectPlaylist = "SELECT PlaylistId, Created, IsPublic, UserName, Name, Description FROM Playlists WHERE PlaylistId=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
@@ -85,8 +82,9 @@ public class PlaylistsDao {
                 boolean isPublic = results.getBoolean("IsPublic");
                 String userName = results.getString("UserName");
                 String name = results.getString("Name");
+                String description = results.getString("Description");
 
-                return new Playlists(playlistId, created, isPublic, userName, name);
+                return new Playlists(playlistId, created, isPublic, userName, name, description);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -99,11 +97,8 @@ public class PlaylistsDao {
         return null;
     }
 
-    /**
-     * Update the Name and visibility (IsPublic) of a specific Playlist.
-     */
-    public Playlists updatePlaylist(Playlists playlist, String newName, boolean newIsPublic) throws SQLException {
-        String updatePlaylist = "UPDATE Playlists SET Name=?, IsPublic=? WHERE PlaylistId=?;";
+    public Playlists updatePlaylist(Playlists playlist, String newName, boolean newIsPublic, String newDescription) throws SQLException {
+        String updatePlaylist = "UPDATE Playlists SET Name=?, IsPublic=?, Description=? WHERE PlaylistId=?;";
         Connection connection = null;
         PreparedStatement updateStmt = null;
 
@@ -112,12 +107,13 @@ public class PlaylistsDao {
             updateStmt = connection.prepareStatement(updatePlaylist);
             updateStmt.setString(1, newName);
             updateStmt.setBoolean(2, newIsPublic);
-            updateStmt.setInt(3, playlist.getPlaylistId());
+            updateStmt.setString(3, newDescription);
+            updateStmt.setInt(4, playlist.getPlaylistId());
             updateStmt.executeUpdate();
 
-            // Update the playlist fields
             playlist.setName(newName);
             playlist.setIsPublic(newIsPublic);
+            playlist.setDescription(newDescription);
             return playlist;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -128,9 +124,6 @@ public class PlaylistsDao {
         }
     }
 
-    /**
-     * Delete the specified Playlist instance from the database.
-     */
     public Playlists delete(Playlists playlist) throws SQLException {
         String deletePlaylist = "DELETE FROM Playlists WHERE PlaylistId=?;";
         Connection connection = null;
@@ -142,7 +135,6 @@ public class PlaylistsDao {
             deleteStmt.setInt(1, playlist.getPlaylistId());
             deleteStmt.executeUpdate();
 
-            // Return null to indicate the playlist was deleted
             return null;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -152,10 +144,10 @@ public class PlaylistsDao {
             if (connection != null) connection.close();
         }
     }
-    
+
     public List<Playlists> getPlaylistsForUser(String userName) throws SQLException {
         List<Playlists> playlists = new ArrayList<>();
-        String selectPlaylists = "SELECT PlaylistId, Created, IsPublic, UserName, Name FROM Playlists WHERE UserName=?;";
+        String selectPlaylists = "SELECT PlaylistId, Created, IsPublic, UserName, Name, Description FROM Playlists WHERE UserName=?;";
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
@@ -169,7 +161,8 @@ public class PlaylistsDao {
                 Timestamp created = results.getTimestamp("Created");
                 boolean isPublic = results.getBoolean("IsPublic");
                 String name = results.getString("Name");
-                Playlists playlist = new Playlists(playlistId, created, isPublic, userName, name);
+                String description = results.getString("Description");
+                Playlists playlist = new Playlists(playlistId, created, isPublic, userName, name, description);
                 playlists.add(playlist);
             }
         } catch (SQLException e) {
