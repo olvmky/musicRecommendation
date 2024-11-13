@@ -18,15 +18,31 @@
 	rel="stylesheet">
 <style>
 body {
+	background-color: #f8f9fa;
 	padding-top: 20px;
 }
 
-.search-section {
+.search-section, .results-section, .card {
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 20px;
 	margin-bottom: 30px;
+	overflow: hidden;
 }
 
-.results-section {
-	margin-top: 30px;
+.section-title {
+	color: #333;
+	font-size: 1.25rem;
+	font-weight: 600;
+	margin: -20px -20px 20px -20px;
+	padding: 10px 20px;
+	background-color: rgba(0, 123, 255, 0.1);
+	border-bottom: 1px solid #eee;
+}
+
+.star-rating {
+	color: #ffc107;
 }
 
 .pagination-container {
@@ -36,12 +52,22 @@ body {
 }
 
 .pagination-container input {
-	width: 50px;
+	width: 60px;
 	text-align: center;
 }
 
-.star-rating {
-	color: #ffc107;
+.card-header {
+	background-color: rgba(0, 123, 255, 0.1);
+	border-bottom: 1px solid #eee;
+	margin: -20px -20px 20px -20px;
+	padding: 10px 20px;
+}
+
+.card-title {
+	margin-bottom: 0;
+	color: #333;
+	font-size: 1.25rem;
+	font-weight: 600;
 }
 </style>
 </head>
@@ -50,7 +76,7 @@ body {
 		<h1 class="text-center mb-4">Welcome to SoundWave</h1>
 
 		<div class="search-section">
-			<h2>Search</h2>
+			<h2 class="section-title">Search</h2>
 			<ul class="nav nav-tabs" id="searchTabs" role="tablist">
 				<li class="nav-item" role="presentation">
 					<button
@@ -139,37 +165,38 @@ body {
 		</div>
 
 		<div class="results-section">
-			<h2>Search Results</h2>
+			<h2 class="section-title">Search Results</h2>
 
 			<c:if test="${not empty users}">
-				<h3>Matching Users</h3>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>UserName</th>
-							<th>FirstName</th>
-							<th>LastName</th>
-							<th>Email</th>
-							<th>Phone</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${users}" var="user">
+				<h3 class="mt-4 mb-3">Matching Users</h3>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
 							<tr>
-								<td><c:out value="${user.getUserName()}" /></td>
-								<td><c:out value="${user.getFirstName()}" /></td>
-								<td><c:out value="${user.getLastName()}" /></td>
-								<td><c:out value="${user.getEmail()}" /></td>
-								<td><c:out value="${user.getPhone()}" /></td>
-								<td><a
-									href="userdetails?username=<c:out value="${user.getUserName()}"/>"
-									class="btn btn-sm btn-info">View Details</a></td>
+								<th>UserName</th>
+								<th>FirstName</th>
+								<th>LastName</th>
+								<th>Email</th>
+								<th>Phone</th>
+								<th>Action</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-
+						</thead>
+						<tbody>
+							<c:forEach items="${users}" var="user">
+								<tr>
+									<td><c:out value="${user.getUserName()}" /></td>
+									<td><c:out value="${user.getFirstName()}" /></td>
+									<td><c:out value="${user.getLastName()}" /></td>
+									<td><c:out value="${user.getEmail()}" /></td>
+									<td><c:out value="${user.getPhone()}" /></td>
+									<td><a
+										href="userdetails?username=<c:out value="${user.getUserName()}"/>"
+										class="btn btn-primary btn-sm">View Details</a></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 				<div class="pagination-container mt-3">
 					<button class="btn btn-secondary me-2"
 						onclick="changePage('users', -1)">
@@ -187,49 +214,50 @@ body {
 			</c:if>
 
 			<c:if test="${not empty tracks}">
-				<h3>Matching Tracks</h3>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Track Name</th>
-							<th>Popularity</th>
-							<th>Explicit</th>
-							<th>Duration</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${tracks}" var="track">
+				<h3 class="mt-4 mb-3">Matching Tracks</h3>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
 							<tr>
-								<td><c:out value="${track.getTrackName()}" /></td>
-								<td><span class="star-rating"> <c:forEach begin="1"
-											end="5" var="i">
-											<c:choose>
-												<c:when test="${i <= track.getPopularity() / 20}">&#9733;</c:when>
-												<c:otherwise>&#9734;</c:otherwise>
-											</c:choose>
-										</c:forEach>
-								</span></td>
-								<td><c:choose>
-										<c:when test="${track.isExplicit()}">
-											<span class="badge bg-danger">Explicit</span>
-										</c:when>
-										<c:otherwise>
-											<span class="badge bg-success">Clean</span>
-										</c:otherwise>
-									</c:choose></td>
-								<td><fmt:formatNumber
-										value="${track.getDurationMs() / 60000}" pattern="#0" />:<fmt:formatNumber
-										value="${track.getDurationMs() % 60000 / 1000}" pattern="00" />
-								</td>
-								<td><a
-									href="trackdetails?trackid=<c:out value="${track.getTrackId()}"/>"
-									class="btn btn-sm btn-info">View Details</a></td>
+								<th>Track Name</th>
+								<th>Popularity</th>
+								<th>Explicit</th>
+								<th>Duration</th>
+								<th>Action</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-
+						</thead>
+						<tbody>
+							<c:forEach items="${tracks}" var="track">
+								<tr>
+									<td><c:out value="${track.getTrackName()}" /></td>
+									<td><span class="star-rating"> <c:forEach begin="1"
+												end="5" var="i">
+												<c:choose>
+													<c:when test="${i <= track.getPopularity() / 20}">&#9733;</c:when>
+													<c:otherwise>&#9734;</c:otherwise>
+												</c:choose>
+											</c:forEach>
+									</span></td>
+									<td><c:choose>
+											<c:when test="${track.isExplicit()}">
+												<span class="badge bg-danger">Explicit</span>
+											</c:when>
+											<c:otherwise>
+												<span class="badge bg-success">Clean</span>
+											</c:otherwise>
+										</c:choose></td>
+									<td><fmt:formatNumber
+											value="${track.getDurationMs() / 60000}" pattern="#0" />: <fmt:formatNumber
+											value="${(track.getDurationMs() % 60000) / 1000}"
+											pattern="00" /></td>
+									<td><a
+										href="trackdetails?trackid=<c:out value="${track.getTrackId()}"/>"
+										class="btn btn-primary btn-sm">View Details</a></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 				<div class="pagination-container mt-3">
 					<button class="btn btn-secondary me-2"
 						onclick="changePage('tracks', -1)">
@@ -248,28 +276,29 @@ body {
 			</c:if>
 
 			<c:if test="${not empty albums}">
-				<h3>Matching Albums</h3>
-				<table class="table table-striped">
-					<thead>
-						<tr>
-							<th>Album ID</th>
-							<th>Album Name</th>
-							<th>Action</th>
-						</tr>
-					</thead>
-					<tbody>
-						<c:forEach items="${albums}" var="album">
+				<h3 class="mt-4 mb-3">Matching Albums</h3>
+				<div class="table-responsive">
+					<table class="table table-hover">
+						<thead>
 							<tr>
-								<td><c:out value="${album.getAlbumId()}" /></td>
-								<td><c:out value="${album.getAlbumName()}" /></td>
-								<td><a
-									href="albumdetails?albumid=<c:out value="${album.getAlbumId()}"/>"
-									class="btn btn-sm btn-info">View Details</a></td>
+								<th>Album ID</th>
+								<th>Album Name</th>
+								<th>Action</th>
 							</tr>
-						</c:forEach>
-					</tbody>
-				</table>
-
+						</thead>
+						<tbody>
+							<c:forEach items="${albums}" var="album">
+								<tr>
+									<td><c:out value="${album.getAlbumId()}" /></td>
+									<td><c:out value="${album.getAlbumName()}" /></td>
+									<td><a
+										href="albumdetails?albumid=<c:out value="${album.getAlbumId()}"/>"
+										class="btn btn-primary btn-sm">View Details</a></td>
+								</tr>
+							</c:forEach>
+						</tbody>
+					</table>
+				</div>
 				<div class="pagination-container mt-3">
 					<button class="btn btn-secondary me-2"
 						onclick="changePage('albums', -1)">
