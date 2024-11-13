@@ -2,6 +2,7 @@ package musicapplication.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
@@ -66,8 +67,8 @@ public class TrackDetails extends HttpServlet {
 			}
 			List<Comments> comments = commentsDao.getCommentsByTrackId(trackId);
 
-			TrackDetailsModel trackDetails = new TrackDetailsModel(track, albumName, genreName, moodTags, likeCount, dislikeCount,
-					comments);
+			TrackDetailsModel trackDetails = new TrackDetailsModel(track, albumName, genreName, moodTags, likeCount,
+					dislikeCount, comments);
 
 			req.setAttribute("trackDetails", trackDetails);
 			req.getRequestDispatcher("/TrackDetails.jsp").forward(req, resp);
@@ -75,6 +76,38 @@ public class TrackDetails extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			throw new IOException(e);
+		}
+	}
+
+	@Override
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		String trackId = req.getParameter("trackId");
+		String content = req.getParameter("content");
+
+		if (trackId == null || trackId.trim().isEmpty() || content == null || content.trim().isEmpty()) {
+			resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Track ID and comment content are required");
+			return;
+		}
+
+		try {
+			// Get a random username
+			String randomUserName = commentsDao.getRandomUserName();
+
+			if (randomUserName == null) {
+				resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Unable to get a random user");
+				return;
+			}
+
+			// Create a new comment
+			Comments newComment = new Comments(0, new Timestamp(System.currentTimeMillis()), content, randomUserName,
+					trackId);
+			commentsDao.create(newComment);
+
+			// Redirect back to the track details page
+			resp.sendRedirect("trackdetails?trackid=" + trackId);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error creating comment");
 		}
 	}
 }

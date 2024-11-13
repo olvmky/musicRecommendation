@@ -152,17 +152,18 @@ body {
 									value="${comment.created}" pattern="MMM d, yyyy h:mm a" /></small>
 						</p>
 					</div>
+					<hr />
 				</c:forEach>
 			</div>
 		</div>
 
 		<!-- Add New Comment Section -->
-		<div class="card">
+		<div class="card mt-3">
 			<div class="card-header">
-				<h3 class="card-title">Leave a Comment</h3>
+				<h3 class="card-title">Add a Comment</h3>
 			</div>
 			<div class="card-body">
-				<form action="addComment" method="post">
+				<form action="trackdetails" method="post">
 					<div class="mb-3">
 						<label for="commentContent" class="form-label">Your
 							Comment:</label>

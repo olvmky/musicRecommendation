@@ -43,12 +43,12 @@ public class Inserter {
         System.out.println("Created comment: " + comment.getCommentId());
 
         // Retrieve the comment
-        Comments retrievedComment = commentsDao.getCommentById(comment.getCommentId());
-        System.out.println("Retrieved comment: " + retrievedComment.getContent());
+        //Comments retrievedComment = commentsDao.getCommentById(comment.getCommentId());
+        //System.out.println("Retrieved comment: " + retrievedComment.getContent());
 
         // Get comments by user
-        List<Comments> userComments = commentsDao.getCommentsByUserName(user.getUserName());
-        System.out.println("Number of comments by user: " + userComments.size());
+        //List<Comments> userComments = commentsDao.getCommentsByUserName(user.getUserName());
+        //System.out.println("Number of comments by user: " + userComments.size());
 
         // Create a like/dislike
         LikeAndDislike like = new LikeAndDislike(0, new Timestamp(System.currentTimeMillis()), 
@@ -102,8 +102,8 @@ public class Inserter {
         likeAndDislikeDao.delete(retrievedLike);
         System.out.println("Deleted like/dislike");
 
-        commentsDao.delete(retrievedComment);
-        System.out.println("Deleted comment");
+        //commentsDao.delete(retrievedComment);
+        //System.out.println("Deleted comment");
 
         usersDao.delete(retrievedUser);
         System.out.println("Deleted user");

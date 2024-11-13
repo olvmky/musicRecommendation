@@ -16,12 +16,13 @@ public class CommentsDao {
 	private ConnectionManager connectionManager;
 
 	// SQL statement constants
-	private static final String INSERT_COMMENT = "INSERT INTO Comments(Content,UserName,TrackId) VALUES(?,?,?);";
-	private static final String SELECT_COMMENT = "SELECT CommentId,Created,Content,UserName,TrackId FROM Comments WHERE CommentId=?;";
 	private static final String SELECT_COMMENTS_BY_USER = "SELECT CommentId,Created,Content,UserName,TrackId FROM Comments WHERE UserName=?;";
-	private static final String SELECT_COMMENTS_BY_TRACK = "SELECT CommentId,Created,Content,UserName,TrackId FROM Comments WHERE TrackId=?;";
 	private static final String UPDATE_COMMENT = "UPDATE Comments SET Content=? WHERE CommentId=?;";
 	private static final String DELETE_COMMENT = "DELETE FROM Comments WHERE CommentId=?;";
+	private static final String INSERT_COMMENT = "INSERT INTO Comments(Content,UserName,TrackId) VALUES(?,?,?);";
+    private static final String SELECT_COMMENT = "SELECT CommentId,Created,Content,UserName,TrackId FROM Comments WHERE CommentId=?;";
+    private static final String SELECT_COMMENTS_BY_TRACK = "SELECT CommentId,Created,Content,UserName,TrackId FROM Comments WHERE TrackId=?;";
+    private static final String SELECT_RANDOM_USER = "SELECT UserName FROM Users ORDER BY RAND() LIMIT 1;";
 
 	// Column name constants
 	private static final String COLUMN_COMMENT_ID = "CommentId";
@@ -53,47 +54,124 @@ public class CommentsDao {
     }
 
 	/**
-	 * Create a new comment in the database.
-	 * 
-	 * @param comment The comment to be created.
-	 * @return The created comment with the auto-generated ID.
-	 * @throws SQLException if a database access error occurs.
-	 */
-	public Comments create(Comments comment) throws SQLException {
-		Connection connection = null;
-		PreparedStatement insertStmt = null;
-		ResultSet resultKey = null;
-		try {
-			connection = connectionManager.getConnection();
-			insertStmt = connection.prepareStatement(INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS);
-			insertStmt.setString(1, comment.getContent());
-			insertStmt.setString(2, comment.getUserName());
-			insertStmt.setString(3, comment.getTrackId());
-			insertStmt.executeUpdate();
-			resultKey = insertStmt.getGeneratedKeys();
-			int commentId = -1;
-			if (resultKey.next()) {
-				commentId = resultKey.getInt(1);
-			} else {
-				throw new SQLException("Unable to retrieve auto-generated key.");
-			}
-			comment.setCommentId(commentId);
-			return comment;
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			if (connection != null) {
-				connection.close();
-			}
-			if (insertStmt != null) {
-				insertStmt.close();
-			}
-			if (resultKey != null) {
-				resultKey.close();
-			}
-		}
-	}
+     * Create a new comment in the database.
+     */
+    public Comments create(Comments comment) throws SQLException {
+        Connection connection = null;
+        PreparedStatement insertStmt = null;
+        ResultSet resultKey = null;
+        try {
+            connection = connectionManager.getConnection();
+            insertStmt = connection.prepareStatement(INSERT_COMMENT, Statement.RETURN_GENERATED_KEYS);
+            insertStmt.setString(1, comment.getContent());
+            insertStmt.setString(2, comment.getUserName());
+            insertStmt.setString(3, comment.getTrackId());
+            insertStmt.executeUpdate();
+            resultKey = insertStmt.getGeneratedKeys();
+            int commentId = -1;
+            if (resultKey.next()) {
+                commentId = resultKey.getInt(1);
+            } else {
+                throw new SQLException("Unable to retrieve auto-generated key.");
+            }
+            comment.setCommentId(commentId);
+            return comment;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (insertStmt != null) {
+                insertStmt.close();
+            }
+            if (resultKey != null) {
+                resultKey.close();
+            }
+        }
+    }
+
+    /**
+     * Retrieve all comments for a specific track.
+     */
+    public List<Comments> getCommentsByTrackId(String trackId) throws SQLException {
+        List<Comments> comments = new ArrayList<>();
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(SELECT_COMMENTS_BY_TRACK);
+            selectStmt.setString(1, trackId);
+            results = selectStmt.executeQuery();
+            while (results.next()) {
+                int commentId = results.getInt("CommentId");
+                Timestamp created = results.getTimestamp("Created");
+                String content = results.getString("Content");
+                String userName = results.getString("UserName");
+                Comments comment = new Comments(commentId, created, content, userName, trackId);
+                comments.add(comment);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (results != null) {
+                results.close();
+            }
+        }
+        return comments;
+    }
+
+    /**
+     * Retrieve a random username from the Users table.
+     */
+    public String getRandomUserName() throws SQLException {
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(SELECT_RANDOM_USER);
+            results = selectStmt.executeQuery();
+            if (results.next()) {
+                return results.getString("UserName");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) {
+                connection.close();
+            }
+            if (selectStmt != null) {
+                selectStmt.close();
+            }
+            if (results != null) {
+                results.close();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Create a new comment with a random username for a specific track.
+     */
+    public Comments createCommentWithRandomUser(String content, String trackId) throws SQLException {
+        String randomUserName = getRandomUserName();
+        if (randomUserName == null) {
+            throw new SQLException("Unable to get a random user");
+        }
+        Comments comment = new Comments(0, new Timestamp(System.currentTimeMillis()), content, randomUserName, trackId);
+        return create(comment);
+    }
 
 	/**
 	 * Retrieve a comment by its ID.
@@ -178,47 +256,6 @@ public class CommentsDao {
 		return comments;
 	}
 
-	/**
-	 * Retrieve all comments for a specific track.
-	 * 
-	 * @param trackId The ID of the track whose comments to retrieve.
-	 * @return A list of comments for the specified track.
-	 * @throws SQLException if a database access error occurs.
-	 */
-	public List<Comments> getCommentsByTrackId(String trackId) throws SQLException {
-		List<Comments> comments = new ArrayList<>();
-		Connection connection = null;
-		PreparedStatement selectStmt = null;
-		ResultSet results = null;
-		try {
-			connection = connectionManager.getConnection();
-			selectStmt = connection.prepareStatement(SELECT_COMMENTS_BY_TRACK);
-			selectStmt.setString(1, trackId);
-			results = selectStmt.executeQuery();
-			while (results.next()) {
-				int commentId = results.getInt(COLUMN_COMMENT_ID);
-				Timestamp created = results.getTimestamp(COLUMN_CREATED);
-				String content = results.getString(COLUMN_CONTENT);
-				String userName = results.getString(COLUMN_USER_NAME);
-				Comments comment = new Comments(commentId, created, content, userName, trackId);
-				comments.add(comment);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			throw e;
-		} finally {
-			if (connection != null) {
-				connection.close();
-			}
-			if (selectStmt != null) {
-				selectStmt.close();
-			}
-			if (results != null) {
-				results.close();
-			}
-		}
-		return comments;
-	}
 
 	/**
 	 * Update the content of an existing comment.
@@ -278,4 +315,5 @@ public class CommentsDao {
 			}
 		}
 	}
+
 }
