@@ -64,7 +64,7 @@ public class ConnectionManager {
 				throw new SQLException(e);
 			}
 			connection = DriverManager.getConnection(
-			    "jdbc:mysql://" + this.hostName + ":" + this.port + "/" + this.schema + "?useSSL=false&allowPublicKeyRetrieval=true",
+			    "jdbc:mysql://" + this.hostName + ":" + this.port + "/" + this.schema + "?useSSL=false&allowPublicKeyRetrieval=true&zeroDateTimeBehavior=convertToNull&useUnicode=true&characterEncoding=UTF-8",
 			    connectionProperties);
 		} catch (SQLException e) {
 			e.printStackTrace();
