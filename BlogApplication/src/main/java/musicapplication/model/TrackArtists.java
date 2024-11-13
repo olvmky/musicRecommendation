@@ -27,9 +27,10 @@ public class TrackArtists {
         this.artistId = artistId;
     }
 
-    // Method to display the TrackArtist details
+    // Method to display the TrackArtist details track artists
     public void display() {
         System.out.println("Track ID: " + trackId);
         System.out.println("Artist ID: " + artistId);
     }
+  
 }
