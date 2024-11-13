@@ -100,17 +100,17 @@ body {
 								style="max-width: 150px;">
 								<option value="" title="Any">Select mood</option>
 								<option value="HAPPY" ${param.mood == 'HAPPY' ? 'selected' : ''}
-									title="Happy">😊</option>
+									title="Happy">😊 Happy</option>
 								<option value="SAD" ${param.mood == 'SAD' ? 'selected' : ''}
-									title="Sad">😢</option>
+									title="Sad">😢 Sad</option>
 								<option value="RELAXED"
-									${param.mood == 'RELAXED' ? 'selected' : ''} title="Relaxed">😌</option>
+									${param.mood == 'RELAXED' ? 'selected' : ''} title="Relaxed">😌 Relaxed</option>
 								<option value="EXCITED"
-									${param.mood == 'EXCITED' ? 'selected' : ''} title="Excited">🤩</option>
+									${param.mood == 'EXCITED' ? 'selected' : ''} title="Excited">🤩 Excited</option>
 								<option value="ROMANTIC"
-									${param.mood == 'ROMANTIC' ? 'selected' : ''} title="Romantic">❤️</option>
+									${param.mood == 'ROMANTIC' ? 'selected' : ''} title="Romantic">❤️ Romantic</option>
 								<option value="ANGRY" ${param.mood == 'ANGRY' ? 'selected' : ''}
-									title="Angry">😠</option>
+									title="Angry">😠 Angry</option>
 							</select>
 							<button class="btn btn-primary" type="submit">Search
 								Tracks</button>
@@ -210,7 +210,7 @@ body {
 								<td><c:out value="${track.isExplicit() ? 'Yes' : 'No'}" /></td>
 								<td><fmt:formatNumber
 										value="${track.getDurationMs() / 60000}" pattern="#0" />:<fmt:formatNumber
-										value="${(track.getDurationMs() % 60000) / 1000}" pattern="00" />
+										value="${track.getDurationMs() % 60000 / 1000}" pattern="00" />
 								</td>
 								<td><a
 									href="trackdetails?trackid=<c:out value="${track.getTrackId()}"/>"
