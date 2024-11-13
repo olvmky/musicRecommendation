@@ -51,7 +51,7 @@ public class FindUsers extends HttpServlet {
 		}
 		req.setAttribute("users", users);
 
-		req.getRequestDispatcher("/FindUsers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
 	}
 
 	@Override

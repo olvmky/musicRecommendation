@@ -109,7 +109,7 @@ public class TracksDao {
 	
 	public List<Tracks> getTracksByName(String name) throws SQLException {
 	    List<Tracks> tracks = new ArrayList<>();
-	    String selectTracks = "SELECT TrackId, TrackName, AlbumId, GenreId, Popularity, DurationMs, Explicit, Danceability, Energy, Pitch, Loudness, Modality, Speechiness, Acousticness, Instrumentalness, Liveness, Valence, Tempo, TimeSignature FROM Tracks WHERE TrackName LIKE ?;";
+	    String selectTracks = "SELECT TrackId, TrackName, AlbumId, GenreId, Popularity, DurationMs, Explicit, Danceability, Energy, Pitch, Loudness, Modality, Speechiness, Acousticness, Instrumentalness, Liveness, Valence, Tempo, TimeSignature FROM Tracks WHERE TrackName LIKE ? LIMIT 20;";
 	    Connection connection = null;
 	    PreparedStatement selectStmt = null;
 	    ResultSet results = null;

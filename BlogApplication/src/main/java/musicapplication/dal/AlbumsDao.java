@@ -96,7 +96,7 @@ public class AlbumsDao {
 
 	public List<Albums> getAlbumsByName(String albumName) throws SQLException {
 		List<Albums> albums = new ArrayList<>();
-		String selectAlbums = "SELECT AlbumId, AlbumName FROM Albums WHERE AlbumName LIKE ?;";
+		String selectAlbums = "SELECT AlbumId, AlbumName FROM Albums WHERE AlbumName LIKE ? LIMIT 20;";
 		Connection connection = null;
 		PreparedStatement selectStmt = null;
 		ResultSet results = null;

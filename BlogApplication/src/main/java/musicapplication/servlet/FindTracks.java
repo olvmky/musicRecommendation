@@ -47,7 +47,7 @@ public class FindTracks extends HttpServlet {
 		}
 		req.setAttribute("tracks", tracks);
 
-		req.getRequestDispatcher("/FindUsers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
 	}
 
 	@Override

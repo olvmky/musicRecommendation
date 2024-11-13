@@ -47,7 +47,7 @@ public class FindAlbums extends HttpServlet {
 		}
 		req.setAttribute("albums", albums);
 
-		req.getRequestDispatcher("/FindUsers.jsp").forward(req, resp);
+		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
 	}
 
 	@Override

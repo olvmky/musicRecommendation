@@ -198,7 +198,7 @@ public class UsersDao {
 	 */
 	public List<Users> getUsersByName(String name) throws SQLException {
 	    List<Users> users = new ArrayList<>();
-	    String selectUsers = "SELECT UserName, Password, FirstName, LastName, Email, Phone FROM Users WHERE FirstName LIKE ? OR LastName LIKE ?;";
+	    String selectUsers = "SELECT UserName, Password, FirstName, LastName, Email, Phone FROM Users WHERE FirstName LIKE ? OR LastName LIKE ? LIMIT 20;";
 	    Connection connection = null;
 	    PreparedStatement selectStmt = null;
 	    ResultSet results = null;
