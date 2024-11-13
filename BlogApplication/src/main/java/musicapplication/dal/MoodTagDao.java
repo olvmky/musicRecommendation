@@ -28,10 +28,10 @@ public class MoodTagDao {
     }
 
     // SQL statements
-    private static final String INSERT_MOOD_TAG = "INSERT INTO MoodTag(MoodName, TrackId, UserName) VALUES(?,?,?);";
-    private static final String SELECT_MOOD_TAG = "SELECT MoodTagId, MoodName, TrackId, UserName FROM MoodTag WHERE MoodTagId=?;";
-    private static final String SELECT_MOOD_TAG_BY_TRACK = "SELECT MoodTagId, MoodName, TrackId, UserName FROM MoodTag WHERE TrackId=?;";
-    private static final String DELETE_MOOD_TAG = "DELETE FROM MoodTag WHERE MoodTagId=?;";
+    private static final String INSERT_MOOD_TAG = "INSERT INTO MoodTag(Mood, TrackId, UserName) VALUES(?,?,?);";
+    private static final String SELECT_MOOD_TAG = "SELECT MoodId, Mood, TrackId, UserName FROM MoodTag WHERE MoodId=?;";
+    private static final String SELECT_MOOD_TAG_BY_TRACK = "SELECT MoodId, Mood, TrackId, UserName FROM MoodTag WHERE TrackId=?;";
+    private static final String DELETE_MOOD_TAG = "DELETE FROM MoodTag WHERE MoodId=?;";
 
     // Create a new MoodTag record
     public MoodTag create(MoodTag moodTag) throws SQLException {
@@ -47,13 +47,13 @@ public class MoodTagDao {
             insertStmt.executeUpdate();
 
             resultKey = insertStmt.getGeneratedKeys();
-            int moodTagId = -1;
+            int moodId = -1;
             if (resultKey.next()) {
-                moodTagId = resultKey.getInt(1);
+                moodId = resultKey.getInt(1);
             } else {
                 throw new SQLException("Unable to retrieve auto-generated key.");
             }
-            moodTag.setMoodTagId(moodTagId);
+            moodTag.setMoodId(moodId);  // Set the MoodId after insertion
             return moodTag;
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,19 +66,19 @@ public class MoodTagDao {
     }
 
     // Retrieve a MoodTag by its ID
-    public MoodTag getMoodTagById(int moodTagId) throws SQLException {
+    public MoodTag getMoodTagById(int moodId) throws SQLException {
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
         try {
             connection = connectionManager.getConnection();
             selectStmt = connection.prepareStatement(SELECT_MOOD_TAG);
-            selectStmt.setInt(1, moodTagId);
+            selectStmt.setInt(1, moodId);
             results = selectStmt.executeQuery();
 
             if (results.next()) {
-                int resultId = results.getInt("MoodTagId");
-                String moodName = results.getString("MoodName");
+                int resultId = results.getInt("MoodId");  // Corrected to MoodId
+                String moodName = results.getString("Mood");
                 MoodTag.Mood mood = MoodTag.Mood.valueOf(moodName); // Convert string back to enum
                 String trackId = results.getString("TrackId");
                 String userName = results.getString("UserName");
@@ -108,8 +108,8 @@ public class MoodTagDao {
             results = selectStmt.executeQuery();
 
             while (results.next()) {
-                int resultId = results.getInt("MoodTagId");
-                String moodName = results.getString("MoodName");
+                int resultId = results.getInt("MoodId");  // Corrected to MoodId
+                String moodName = results.getString("Mood");
                 MoodTag.Mood mood = MoodTag.Mood.valueOf(moodName); // Convert string back to enum
                 String userName = results.getString("UserName");
                 moodTags.add(new MoodTag(resultId, mood, trackId, userName));
@@ -132,7 +132,7 @@ public class MoodTagDao {
         try {
             connection = connectionManager.getConnection();
             deleteStmt = connection.prepareStatement(DELETE_MOOD_TAG);
-            deleteStmt.setInt(1, moodTag.getMoodTagId());
+            deleteStmt.setInt(1, moodTag.getMoodId());  // Corrected to MoodId
             deleteStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
