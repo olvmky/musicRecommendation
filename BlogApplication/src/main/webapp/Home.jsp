@@ -109,9 +109,8 @@ body {
 							<button class="btn btn-primary" type="submit">Search
 								Users</button>
 						</div>
-					 <a href="usercreate" class="btn btn-primary">Create User</a>
-						
 					</form>
+					<a href="usercreate" class="btn btn-primary">Create User</a>
 				</div>
 				<div
 					class="tab-pane fade ${param.activeTab == 'tracks' ? 'show active' : ''}"
