@@ -18,8 +18,8 @@ import musicapplication.model.*;
 
 @WebServlet("/findusers")
 public class FindUsers extends HttpServlet {
-
 	protected UsersDao usersDao;
+	private static final int PAGE_SIZE = 10;
 
 	@Override
 	public void init() throws ServletException {
@@ -27,38 +27,36 @@ public class FindUsers extends HttpServlet {
 	}
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Map<String, String> messages = new HashMap<String, String>();
-
-		req.setAttribute("usermessages", messages);
-		req.setCharacterEncoding("UTF-8");
-		resp.setCharacterEncoding("UTF-8");
-		resp.setContentType("text/html; charset=UTF-8");
-
-		List<Users> users = new ArrayList<Users>();
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Map<String, String> messages = new HashMap<>();
+		req.setAttribute("messages", messages);
 
 		String name = req.getParameter("name");
-		if (name == null || name.trim().isEmpty()) {
-			messages.put("success", "Please enter a valid name.");
-		} else {
+		int page = 1;
+		String pageStr = req.getParameter("page");
+		if (pageStr != null && !pageStr.isEmpty()) {
 			try {
-				users = usersDao.getUsersByName(name);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new IOException(e);
+				page = Integer.parseInt(pageStr);
+			} catch (NumberFormatException e) {
+				messages.put("success", "Invalid page number.");
 			}
-			messages.put("success", "Displaying results for " + name);
 		}
-		req.setAttribute("users", users);
-		
-		// Set the active tab
+
+		List<Users> users;
+		try {
+			users = usersDao.getUsersPaginated(name, page, PAGE_SIZE);
+			int totalUsers = usersDao.getTotalUsersCount(name);
+			int totalPages = (int) Math.ceil((double) totalUsers / PAGE_SIZE);
+
+			req.setAttribute("users", users);
+			req.setAttribute("currentPage", page);
+			req.setAttribute("totalPages", totalPages);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
+
 		req.setAttribute("activeTab", "users");
-
 		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
-	}
-
-	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
 	}
 }

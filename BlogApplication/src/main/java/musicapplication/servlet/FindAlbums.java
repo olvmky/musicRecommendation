@@ -18,8 +18,8 @@ import musicapplication.model.*;
 
 @WebServlet("/findalbums")
 public class FindAlbums extends HttpServlet {
-
 	protected AlbumsDao albumsDao;
+	private static final int PAGE_SIZE = 10;
 
 	@Override
 	public void init() throws ServletException {
@@ -27,34 +27,36 @@ public class FindAlbums extends HttpServlet {
 	}
 
 	@Override
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		Map<String, String> messages = new HashMap<String, String>();
-		req.setAttribute("albummessages", messages);
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		Map<String, String> messages = new HashMap<>();
+		req.setAttribute("messages", messages);
 
-		List<Albums> albums = new ArrayList<Albums>();
-
-		String name = req.getParameter("albumtitle");
-		if (name == null || name.trim().isEmpty()) {
-			messages.put("success", "Please enter a valid name.");
-		} else {
+		String albumTitle = req.getParameter("albumtitle");
+		int page = 1;
+		String pageStr = req.getParameter("page");
+		if (pageStr != null && !pageStr.isEmpty()) {
 			try {
-				albums = albumsDao.getAlbumsByName(name);
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new IOException(e);
+				page = Integer.parseInt(pageStr);
+			} catch (NumberFormatException e) {
+				messages.put("success", "Invalid page number.");
 			}
-			messages.put("success", "Displaying results for " + name);
 		}
-		req.setAttribute("albums", albums);
 
-		// Set the active tab
+		List<Albums> albums;
+		try {
+			albums = albumsDao.getAlbumsPaginated(albumTitle, page, PAGE_SIZE);
+			int totalAlbums = albumsDao.getTotalAlbumsCount(albumTitle);
+			int totalPages = (int) Math.ceil((double) totalAlbums / PAGE_SIZE);
+
+			req.setAttribute("albums", albums);
+			req.setAttribute("currentPage", page);
+			req.setAttribute("totalPages", totalPages);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
+
 		req.setAttribute("activeTab", "albums");
-
 		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
-	}
-
-	@Override
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		doGet(req, resp);
 	}
 }

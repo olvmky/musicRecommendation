@@ -13,6 +13,9 @@
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
 	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+	rel="stylesheet">
 <style>
 body {
 	padding-top: 20px;
@@ -24,6 +27,17 @@ body {
 
 .results-section {
 	margin-top: 30px;
+}
+
+.pagination-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.pagination-container input {
+	width: 50px;
+	text-align: center;
 }
 </style>
 </head>
@@ -57,7 +71,7 @@ body {
 				<div
 					class="tab-pane fade ${param.activeTab == 'users' || param.activeTab == null ? 'show active' : ''}"
 					id="users" role="tabpanel">
-					<form action="findusers" method="post" class="mb-3">
+					<form action="findusers" method="post" class="mb-3" id="usersForm">
 						<input type="hidden" name="activeTab" value="users">
 						<div class="input-group">
 							<input type="text" class="form-control" id="name" name="name"
@@ -71,12 +85,32 @@ body {
 				<div
 					class="tab-pane fade ${param.activeTab == 'tracks' ? 'show active' : ''}"
 					id="tracks" role="tabpanel">
-					<form action="findtracks" method="post" class="mb-3">
+					<form action="findtracks" method="post" class="mb-3"
+						id="tracksForm">
 						<input type="hidden" name="activeTab" value="tracks">
 						<div class="input-group">
 							<input type="text" class="form-control" id="tracktitle"
 								name="tracktitle" placeholder="Enter track title"
-								value="${fn:escapeXml(param.tracktitle)}">
+								value="${fn:escapeXml(param.tracktitle)}"> <select
+								class="form-select" id="mood" name="mood"
+								style="max-width: 150px;">
+								<option value="">Any</option>
+								<option value="HAPPY" ${param.mood == 'HAPPY' ? 'selected' : ''}>😊
+									Happy</option>
+								<option value="SAD" ${param.mood == 'SAD' ? 'selected' : ''}>😢
+									Sad</option>
+								<option value="RELAXED"
+									${param.mood == 'RELAXED' ? 'selected' : ''}>😌
+									Relaxed</option>
+								<option value="EXCITED"
+									${param.mood == 'EXCITED' ? 'selected' : ''}>🤩
+									Excited</option>
+								<option value="ROMANTIC"
+									${param.mood == 'ROMANTIC' ? 'selected' : ''}>❤️
+									Romantic</option>
+								<option value="ANGRY" ${param.mood == 'ANGRY' ? 'selected' : ''}>😠
+									Angry</option>
+							</select>
 							<button class="btn btn-primary" type="submit">Search
 								Tracks</button>
 						</div>
@@ -85,7 +119,8 @@ body {
 				<div
 					class="tab-pane fade ${param.activeTab == 'albums' ? 'show active' : ''}"
 					id="albums" role="tabpanel">
-					<form action="findalbums" method="post" class="mb-3">
+					<form action="findalbums" method="post" class="mb-3"
+						id="albumsForm">
 						<input type="hidden" name="activeTab" value="albums">
 						<div class="input-group">
 							<input type="text" class="form-control" id="albumtitle"
@@ -130,6 +165,22 @@ body {
 						</c:forEach>
 					</tbody>
 				</table>
+
+				<!-- Pagination for users -->
+				<div class="pagination-container mt-3">
+					<button class="btn btn-secondary me-2"
+						onclick="changePage('users', -1)">
+						<i class="fas fa-chevron-left"></i>
+					</button>
+					<span>Page</span> <input type="number" id="currentPageUsers"
+						value="${currentPage}" min="1" max="${totalPages}"
+						class="form-control mx-2" onchange="goToPage('users', this.value)">
+					<span>of ${totalPages}</span>
+					<button class="btn btn-secondary ms-2"
+						onclick="changePage('users', 1)">
+						<i class="fas fa-chevron-right"></i>
+					</button>
+				</div>
 			</c:if>
 
 			<c:if test="${not empty tracks}">
@@ -160,6 +211,23 @@ body {
 						</c:forEach>
 					</tbody>
 				</table>
+
+				<!-- Pagination for tracks -->
+				<div class="pagination-container mt-3">
+					<button class="btn btn-secondary me-2"
+						onclick="changePage('tracks', -1)">
+						<i class="fas fa-chevron-left"></i>
+					</button>
+					<span>Page</span> <input type="number" id="currentPageTracks"
+						value="${currentPage}" min="1" max="${totalPages}"
+						class="form-control mx-2"
+						onchange="goToPage('tracks', this.value)"> <span>of
+						${totalPages}</span>
+					<button class="btn btn-secondary ms-2"
+						onclick="changePage('tracks', 1)">
+						<i class="fas fa-chevron-right"></i>
+					</button>
+				</div>
 			</c:if>
 
 			<c:if test="${not empty albums}">
@@ -184,11 +252,48 @@ body {
 						</c:forEach>
 					</tbody>
 				</table>
+
+				<!-- Pagination for albums -->
+				<div class="pagination-container mt-3">
+					<button class="btn btn-secondary me-2"
+						onclick="changePage('albums', -1)">
+						<i class="fas fa-chevron-left"></i>
+					</button>
+					<span>Page</span> <input type="number" id="currentPageAlbums"
+						value="${currentPage}" min="1" max="${totalPages}"
+						class="form-control mx-2"
+						onchange="goToPage('albums', this.value)"> <span>of
+						${totalPages}</span>
+					<button class="btn btn-secondary ms-2"
+						onclick="changePage('albums', 1)">
+						<i class="fas fa-chevron-right"></i>
+					</button>
+				</div>
 			</c:if>
 		</div>
 	</div>
 
 	<script
 		src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script>
+        function changePage(type, delta) {
+            let currentPage = parseInt(document.getElementById('currentPage' + type.charAt(0).toUpperCase() + type.slice(1)).value);
+            let newPage = currentPage + delta;
+            if (newPage >= 1 && newPage <= ${totalPages}) {
+                goToPage(type, newPage);
+            }
+        }
+
+        function goToPage(type, page) {
+            document.getElementById('currentPage' + type.charAt(0).toUpperCase() + type.slice(1)).value = page;
+            let form = document.getElementById(type + 'Form');
+            let pageInput = document.createElement('input');
+            pageInput.type = 'hidden';
+            pageInput.name = 'page';
+            pageInput.value = page;
+            form.appendChild(pageInput);
+            form.submit();
+        }
+    </script>
 </body>
 </html>

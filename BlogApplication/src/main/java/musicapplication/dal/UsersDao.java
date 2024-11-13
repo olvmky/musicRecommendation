@@ -228,4 +228,72 @@ public class UsersDao {
 	    }
 	    return users;
 	}
+	
+	public List<Users> getUsersPaginated(String nameFilter, int page, int pageSize) throws SQLException {
+	    List<Users> users = new ArrayList<>();
+	    String selectUsers = 
+	        "SELECT UserName, FirstName, LastName, Email, Phone " +
+	        "FROM Users " +
+	        "WHERE FirstName LIKE ? OR LastName LIKE ? " +
+	        "ORDER BY UserName " +
+	        "LIMIT ? OFFSET ?;";
+	    
+	    Connection connection = null;
+	    PreparedStatement selectStmt = null;
+	    ResultSet results = null;
+	    try {
+	        connection = connectionManager.getConnection();
+	        selectStmt = connection.prepareStatement(selectUsers);
+	        selectStmt.setString(1, "%" + nameFilter + "%");
+	        selectStmt.setString(2, "%" + nameFilter + "%");
+	        selectStmt.setInt(3, pageSize);
+	        selectStmt.setInt(4, (page - 1) * pageSize);
+	        results = selectStmt.executeQuery();
+	        while (results.next()) {
+	            String userName = results.getString("UserName");
+	            String firstName = results.getString("FirstName");
+	            String lastName = results.getString("LastName");
+	            String email = results.getString("Email");
+	            String phone = results.getString("Phone");
+	            Users user = new Users(userName, null, firstName, lastName, email, phone);
+	            users.add(user);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        if (connection != null) connection.close();
+	        if (selectStmt != null) selectStmt.close();
+	        if (results != null) results.close();
+	    }
+	    return users;
+	}
+
+	public int getTotalUsersCount(String nameFilter) throws SQLException {
+	    String countQuery = 
+	        "SELECT COUNT(*) FROM Users " +
+	        "WHERE FirstName LIKE ? OR LastName LIKE ?;";
+	    
+	    Connection connection = null;
+	    PreparedStatement countStmt = null;
+	    ResultSet results = null;
+	    try {
+	        connection = connectionManager.getConnection();
+	        countStmt = connection.prepareStatement(countQuery);
+	        countStmt.setString(1, "%" + nameFilter + "%");
+	        countStmt.setString(2, "%" + nameFilter + "%");
+	        results = countStmt.executeQuery();
+	        if (results.next()) {
+	            return results.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        if (connection != null) connection.close();
+	        if (countStmt != null) countStmt.close();
+	        if (results != null) results.close();
+	    }
+	    return 0;
+	}
 }

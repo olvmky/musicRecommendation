@@ -151,4 +151,67 @@ public class AlbumsDao {
 			}
 		}
 	}
+	
+	public List<Albums> getAlbumsPaginated(String titleFilter, int page, int pageSize) throws SQLException {
+	    List<Albums> albums = new ArrayList<>();
+	    String selectAlbums = 
+	        "SELECT AlbumId, AlbumName " +
+	        "FROM Albums " +
+	        "WHERE AlbumName LIKE ? " +
+	        "ORDER BY AlbumName " +
+	        "LIMIT ? OFFSET ?;";
+	    
+	    Connection connection = null;
+	    PreparedStatement selectStmt = null;
+	    ResultSet results = null;
+	    try {
+	        connection = connectionManager.getConnection();
+	        selectStmt = connection.prepareStatement(selectAlbums);
+	        selectStmt.setString(1, "%" + titleFilter + "%");
+	        selectStmt.setInt(2, pageSize);
+	        selectStmt.setInt(3, (page - 1) * pageSize);
+	        results = selectStmt.executeQuery();
+	        while (results.next()) {
+	            int albumId = results.getInt("AlbumId");
+	            String albumName = results.getString("AlbumName");
+	            Albums album = new Albums(albumId, albumName);
+	            albums.add(album);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        if (connection != null) connection.close();
+	        if (selectStmt != null) selectStmt.close();
+	        if (results != null) results.close();
+	    }
+	    return albums;
+	}
+
+	public int getTotalAlbumsCount(String titleFilter) throws SQLException {
+	    String countQuery = 
+	        "SELECT COUNT(*) FROM Albums " +
+	        "WHERE AlbumName LIKE ?;";
+	    
+	    Connection connection = null;
+	    PreparedStatement countStmt = null;
+	    ResultSet results = null;
+	    try {
+	        connection = connectionManager.getConnection();
+	        countStmt = connection.prepareStatement(countQuery);
+	        countStmt.setString(1, "%" + titleFilter + "%");
+	        results = countStmt.executeQuery();
+	        if (results.next()) {
+	            return results.getInt(1);
+	        }
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	        throw e;
+	    } finally {
+	        if (connection != null) connection.close();
+	        if (countStmt != null) countStmt.close();
+	        if (results != null) results.close();
+	    }
+	    return 0;
+	}
 }
