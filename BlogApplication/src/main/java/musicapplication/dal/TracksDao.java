@@ -219,6 +219,58 @@ public class TracksDao {
 		}
 		return tracks;
 	}
+	
+	public List<Tracks> getTracksByAlbumId(int albumId) throws SQLException {
+		List<Tracks> tracks = new ArrayList<>();
+		String selectTracks = "SELECT TrackId, TrackName, AlbumId, GenreId, Popularity, DurationMs, Explicit, Danceability, Energy, Pitch, Loudness, Modality, Speechiness, Acousticness, Instrumentalness, Liveness, Valence, Tempo, TimeSignature FROM Tracks WHERE AlbumId=?;";
+		Connection connection = null;
+		PreparedStatement selectStmt = null;
+		ResultSet results = null;
+		try {
+			connection = connectionManager.getConnection();
+			selectStmt = connection.prepareStatement(selectTracks);
+			selectStmt.setInt(1, albumId);
+			results = selectStmt.executeQuery();
+
+			while (results.next()) {
+				String trackId = results.getString("TrackId");
+				String trackName = results.getString("TrackName");
+				int resultalbumId = results.getInt("AlbumId");
+				int resultGenreId = results.getInt("GenreId");
+				int popularity = results.getInt("Popularity");
+				int durationMs = results.getInt("DurationMs");
+				boolean explicit = results.getBoolean("Explicit");
+				double danceability = results.getDouble("Danceability");
+				double energy = results.getDouble("Energy");
+				int pitch = results.getInt("Pitch");
+				double loudness = results.getDouble("Loudness");
+				int modality = results.getInt("Modality");
+				double speechiness = results.getDouble("Speechiness");
+				double acousticness = results.getDouble("Acousticness");
+				double instrumentalness = results.getDouble("Instrumentalness");
+				double liveness = results.getDouble("Liveness");
+				double valence = results.getDouble("Valence");
+				double tempo = results.getDouble("Tempo");
+				int timeSignature = results.getInt("TimeSignature");
+
+				Tracks track = new Tracks(trackId, trackName, resultalbumId, resultGenreId, popularity, durationMs, explicit,
+						danceability, energy, pitch, loudness, modality, speechiness, acousticness, instrumentalness,
+						liveness, valence, tempo, timeSignature);
+				tracks.add(track);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw e;
+		} finally {
+			if (connection != null)
+				connection.close();
+			if (selectStmt != null)
+				selectStmt.close();
+			if (results != null)
+				results.close();
+		}
+		return tracks;
+	}
 
 	public Tracks delete(Tracks track) throws SQLException {
 		String deleteTrack = "DELETE FROM Tracks WHERE TrackId=?;";
