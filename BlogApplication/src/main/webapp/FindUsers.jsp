@@ -8,7 +8,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-    <title>Find Users</title>
+    <title>Main Page</title>
 </head>
 <body>
     <form action="findusers" method="post">
@@ -20,7 +20,7 @@
         <p>
             <input type="submit">
             <br/><br/><br/>
-            <span id="successMessage"><b>${messages.success}</b></span>
+            <span id="successMessage"><b>${usermessages.success}</b></span>
         </p>
     </form>
     <br/>
@@ -45,5 +45,71 @@
             </tr>
         </c:forEach>
     </table>
+    
+    <form action="findtracks" method="post">
+        <h1>Search for a Track by Title</h1>
+        <p>
+            <label for="tracktitle">Track Title</label>
+            <input id="tracktitle" name="tracktitle" value="${fn:escapeXml(param.tracktitle)}">
+        </p>
+        <p>
+            <input type="submit">
+            <br/><br/><br/>
+            <span id="successMessage"><b>${trackmessages.success}</b></span>
+        </p>
+    </form>
+    <br/>
+    <h1>Matching Tracks</h1>
+    <table border="1">
+        <tr>
+            <th>Track ID</th>
+            <th>Track Name</th>
+            <th>Popularity</th>
+            <th>Explicit</th>
+            <th>Duration(ms)</th>
+            <th>View Details</th>
+        </tr>
+        <c:forEach items="${tracks}" var="track" >
+            <tr>
+                <td><c:out value="${track.getTrackId()}" /></td>
+                <td><c:out value="${track.getTrackName()}" /></td>
+                <td><c:out value="${track.getPopularity()}" /></td>
+                <td><c:out value="${track.isExplicit()}" /></td>
+                <td><c:out value="${track.getDurationMs()}" /></td>
+                <td><a href="trackdetails?trackid=<c:out value="${track.getTrackId()}"/>">View Details</a></td>
+            </tr>
+        </c:forEach>
+    </table>
+    
+    <form action="findalbums" method="post">
+        <h1>Search for a Album by Title</h1>
+        <p>
+            <label for="albumtitle">Album Title</label>
+            <input id="albumtitle" name="albumtitle" value="${fn:escapeXml(param.albumtitle)}">
+        </p>
+        <p>
+            <input type="submit">
+            <br/><br/><br/>
+            <span id="successMessage"><b>${albummessages.success}</b></span>
+        </p>
+    </form>
+    <br/>
+    <h1>Matching Albums</h1>
+    <table border="1">
+        <tr>
+            <th>Album ID</th>
+            <th>Album Name</th>
+            <th>View Details</th>
+        </tr>
+        <c:forEach items="${albums}" var="album" >
+            <tr>
+                <td><c:out value="${album.getAlbumId()}" /></td>
+                <td><c:out value="${album.getAlbumName()}" /></td>
+                <td><a href="albumdetails?albumid=<c:out value="${album.getAlbumId()}"/>">View Details</a></td>
+            </tr>
+        </c:forEach>
+    </table>
+    
+    
 </body>
 </html>

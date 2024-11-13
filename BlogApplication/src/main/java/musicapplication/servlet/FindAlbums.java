@@ -16,36 +16,36 @@ import javax.servlet.http.HttpServletResponse;
 import musicapplication.dal.*;
 import musicapplication.model.*;
 
-@WebServlet("/findusers")
-public class FindUsers extends HttpServlet {
+@WebServlet("/findalbums")
+public class FindAlbums extends HttpServlet {
 
-	protected UsersDao usersDao;
+	protected AlbumsDao albumsDao;
 
 	@Override
 	public void init() throws ServletException {
-		usersDao = UsersDao.getInstance();
+		albumsDao = AlbumsDao.getInstance();
 	}
 
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<String, String>();
-		req.setAttribute("usermessages", messages);
+		req.setAttribute("albummessages", messages);
 
-		List<Users> users = new ArrayList<Users>();
+		List<Albums> albums = new ArrayList<Albums>();
 
-		String name = req.getParameter("name");
+		String name = req.getParameter("albumtitle");
 		if (name == null || name.trim().isEmpty()) {
 			messages.put("success", "Please enter a valid name.");
 		} else {
 			try {
-				users = usersDao.getUsersByName(name);
+				albums = albumsDao.getAlbumsByName(name);
 			} catch (SQLException e) {
 				e.printStackTrace();
 				throw new IOException(e);
 			}
 			messages.put("success", "Displaying results for " + name);
 		}
-		req.setAttribute("users", users);
+		req.setAttribute("albums", albums);
 
 		req.getRequestDispatcher("/FindUsers.jsp").forward(req, resp);
 	}
