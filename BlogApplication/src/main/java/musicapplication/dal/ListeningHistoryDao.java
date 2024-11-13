@@ -26,7 +26,11 @@ public class ListeningHistoryDao {
     private static final String SELECT_LISTENING_HISTORY = 
         "SELECT HistoryId, Created, TimesListened, Duration, TrackId, UserName FROM ListeningHistory WHERE HistoryId=?;";
     private static final String SELECT_LISTENING_HISTORY_BY_USER = 
-        "SELECT HistoryId, Created, TimesListened, Duration, TrackId, UserName FROM ListeningHistory WHERE UserName=? ORDER BY Created DESC;";
+    		"SELECT lh.HistoryId, lh.TrackId, t.TrackName, lh.UserName, lh.TimesListened, lh.Duration " +
+    	            "FROM ListeningHistory lh " +
+    	            "JOIN Tracks t ON lh.TrackId = t.TrackId " +
+    	            "WHERE lh.UserName = ? " +
+    	            "ORDER BY lh.TimesListened DESC;";
     private static final String DELETE_LISTENING_HISTORY = 
         "DELETE FROM ListeningHistory WHERE HistoryId=?;";
 
@@ -98,6 +102,7 @@ public class ListeningHistoryDao {
 
     public List<ListeningHistory> getListeningHistoryForUser(String userName) throws SQLException {
         List<ListeningHistory> listeningHistoryList = new ArrayList<>();
+        
         Connection connection = null;
         PreparedStatement selectStmt = null;
         ResultSet results = null;
@@ -108,11 +113,13 @@ public class ListeningHistoryDao {
             results = selectStmt.executeQuery();
             while (results.next()) {
                 int historyId = results.getInt("HistoryId");
-                Timestamp created = results.getTimestamp("Created");
+                String trackId = results.getString("TrackId");
+                String trackName = results.getString("TrackName");
                 int timesListened = results.getInt("TimesListened");
                 int duration = results.getInt("Duration");
-                String trackId = results.getString("TrackId");
-                ListeningHistory history = new ListeningHistory(historyId, created, timesListened, duration, trackId, userName);
+                
+                ListeningHistory history = new ListeningHistory(historyId, null, timesListened, duration, trackId, userName);
+                history.setTrackName(trackName);
                 listeningHistoryList.add(history);
             }
         } catch (SQLException e) {

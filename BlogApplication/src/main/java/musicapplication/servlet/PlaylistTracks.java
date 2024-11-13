@@ -15,33 +15,35 @@ import musicapplication.model.*;
 
 @WebServlet("/playlisttracks")
 public class PlaylistTracks extends HttpServlet {
-    
-    protected PlaylistsDao playlistsDao;
-    protected TracksDao tracksDao;
-    
-    @Override
-    public void init() throws ServletException {
-        playlistsDao = PlaylistsDao.getInstance();
-        tracksDao = TracksDao.getInstance();
-    }
-    
-    @Override
-    public void doGet(HttpServletRequest req, HttpServletResponse resp)
-            throws ServletException, IOException {
-        int playlistId = Integer.parseInt(req.getParameter("playlistid"));
-        
-        try {
-            Playlists playlist = playlistsDao.getPlaylistById(playlistId);
-            List<Tracks> tracks = tracksDao.getTracksForPlaylist(playlistId);
-            
-            req.setAttribute("playlist", playlist);
-            req.setAttribute("tracks", tracks);
-            
-        } catch (SQLException e) {
-            e.printStackTrace();
-            throw new IOException(e);
-        }
-        
-        req.getRequestDispatcher("/PlaylistTracks.jsp").forward(req, resp);
-    }
+
+	protected PlaylistsDao playlistsDao;
+	protected TracksDao tracksDao;
+
+	@Override
+	public void init() throws ServletException {
+		playlistsDao = PlaylistsDao.getInstance();
+		tracksDao = TracksDao.getInstance();
+	}
+
+	@Override
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int playlistId = Integer.parseInt(req.getParameter("playlistid"));
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=UTF-8");
+
+		try {
+			Playlists playlist = playlistsDao.getPlaylistById(playlistId);
+			List<Tracks> tracks = tracksDao.getTracksForPlaylist(playlistId);
+
+			req.setAttribute("playlist", playlist);
+			req.setAttribute("tracks", tracks);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new IOException(e);
+		}
+
+		req.getRequestDispatcher("/PlaylistTracks.jsp").forward(req, resp);
+	}
 }

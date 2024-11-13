@@ -266,4 +266,95 @@ public class TracksDao {
 	    }
 	    return tracks;
 	}
+	
+	public List<RecommendedTracks> getRecommendedTracks(String userName, int limit) throws SQLException {
+        List<RecommendedTracks> recommendedTracks = new ArrayList<>();
+        String selectRecommendedTracks = 
+            "SELECT t.TrackId, t.TrackName, a.ArtistName, t.Popularity, " +
+            "   (ABS(t.Danceability - avg_t.avg_danceability) + " +
+            "    ABS(t.Energy - avg_t.avg_energy) + " +
+            "    ABS(t.Loudness - avg_t.avg_loudness) + " +
+            "    ABS(t.Speechiness - avg_t.avg_speechiness) + " +
+            "    ABS(t.Acousticness - avg_t.avg_acousticness) + " +
+            "    ABS(t.Instrumentalness - avg_t.avg_instrumentalness) + " +
+            "    ABS(t.Liveness - avg_t.avg_liveness) + " +
+            "    ABS(t.Valence - avg_t.avg_valence) + " +
+            "    ABS(t.Tempo - avg_t.avg_tempo) / 100) AS similarity_score " +
+            "FROM Tracks t " +
+            "JOIN TrackArtists ta ON t.TrackId = ta.TrackId " +
+            "JOIN Artists a ON ta.ArtistId = a.ArtistId " +
+            "JOIN ( " +
+            "   SELECT GenreId, " +
+            "       AVG(Danceability) as avg_danceability, " +
+            "       AVG(Energy) as avg_energy, " +
+            "       AVG(Loudness) as avg_loudness, " +
+            "       AVG(Speechiness) as avg_speechiness, " +
+            "       AVG(Acousticness) as avg_acousticness, " +
+            "       AVG(Instrumentalness) as avg_instrumentalness, " +
+            "       AVG(Liveness) as avg_liveness, " +
+            "       AVG(Valence) as avg_valence, " +
+            "       AVG(Tempo) as avg_tempo " +
+            "   FROM Tracks " +
+            "   WHERE TrackId IN (SELECT TrackId FROM ListeningHistory WHERE UserName = ?) " +
+            "   GROUP BY GenreId " +
+            ") avg_t ON t.GenreId = avg_t.GenreId " +
+            "WHERE t.TrackId NOT IN (SELECT TrackId FROM ListeningHistory WHERE UserName = ?) " +
+            "ORDER BY similarity_score ASC, t.Popularity DESC " +
+            "LIMIT ?";
+        
+        Connection connection = null;
+        PreparedStatement selectStmt = null;
+        ResultSet results = null;
+        try {
+            connection = connectionManager.getConnection();
+            selectStmt = connection.prepareStatement(selectRecommendedTracks);
+            selectStmt.setString(1, userName);
+            selectStmt.setString(2, userName);
+            selectStmt.setInt(3, limit);
+            results = selectStmt.executeQuery();
+            while (results.next()) {
+                String trackId = results.getString("TrackId");
+                String trackName = results.getString("TrackName");
+                String artistName = results.getString("ArtistName");
+                int popularity = results.getInt("Popularity");
+                double similarityScore = results.getDouble("similarity_score");
+                RecommendedTracks track = new RecommendedTracks(trackId, trackName, artistName, popularity, similarityScore);
+                recommendedTracks.add(track);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw e;
+        } finally {
+            if (connection != null) connection.close();
+            if (selectStmt != null) selectStmt.close();
+            if (results != null) results.close();
+        }
+        return recommendedTracks;
+    }
+
+    private Tracks extractTrackFromResultSet(ResultSet results) throws SQLException {
+        String trackId = results.getString("TrackId");
+        String trackName = results.getString("TrackName");
+        int albumId = results.getInt("AlbumId");
+        int genreId = results.getInt("GenreId");
+        int popularity = results.getInt("Popularity");
+        int durationMs = results.getInt("DurationMs");
+        boolean explicit = results.getBoolean("Explicit");
+        double danceability = results.getDouble("Danceability");
+        double energy = results.getDouble("Energy");
+        int pitch = results.getInt("Pitch");
+        double loudness = results.getDouble("Loudness");
+        int modality = results.getInt("Modality");
+        double speechiness = results.getDouble("Speechiness");
+        double acousticness = results.getDouble("Acousticness");
+        double instrumentalness = results.getDouble("Instrumentalness");
+        double liveness = results.getDouble("Liveness");
+        double valence = results.getDouble("Valence");
+        double tempo = results.getDouble("Tempo");
+        int timeSignature = results.getInt("TimeSignature");
+
+        return new Tracks(trackId, trackName, albumId, genreId, popularity, durationMs, explicit,
+                danceability, energy, pitch, loudness, modality, speechiness, acousticness,
+                instrumentalness, liveness, valence, tempo, timeSignature);
+    }
 }

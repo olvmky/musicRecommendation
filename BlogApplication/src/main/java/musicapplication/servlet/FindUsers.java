@@ -29,7 +29,11 @@ public class FindUsers extends HttpServlet {
 	@Override
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		Map<String, String> messages = new HashMap<String, String>();
+
 		req.setAttribute("usermessages", messages);
+		req.setCharacterEncoding("UTF-8");
+		resp.setCharacterEncoding("UTF-8");
+		resp.setContentType("text/html; charset=UTF-8");
 
 		List<Users> users = new ArrayList<Users>();
 

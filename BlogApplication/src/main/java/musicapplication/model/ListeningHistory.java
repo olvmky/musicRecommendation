@@ -12,6 +12,7 @@ public class ListeningHistory {
     private int duration;
     private String trackId;
     private String userName;
+    private String trackName;
 
     /**
      * Constructs a new ListeningHistory object.
@@ -33,6 +34,14 @@ public class ListeningHistory {
     }
 
     // Getters and setters
+    
+    public String getTrackName() {
+        return trackName;
+    }
+
+    public void setTrackName(String trackName) {
+        this.trackName = trackName;
+    }
 
     public int getHistoryId() {
         return historyId;
