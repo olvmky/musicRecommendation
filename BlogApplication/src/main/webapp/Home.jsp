@@ -39,6 +39,10 @@ body {
 	width: 50px;
 	text-align: center;
 }
+
+.star-rating {
+	color: #ffc107;
+}
 </style>
 </head>
 <body>
@@ -94,22 +98,19 @@ body {
 								value="${fn:escapeXml(param.tracktitle)}"> <select
 								class="form-select" id="mood" name="mood"
 								style="max-width: 150px;">
-								<option value="">Any</option>
-								<option value="HAPPY" ${param.mood == 'HAPPY' ? 'selected' : ''}>😊
-									Happy</option>
-								<option value="SAD" ${param.mood == 'SAD' ? 'selected' : ''}>😢
-									Sad</option>
+								<option value="" title="Any">Select mood</option>
+								<option value="HAPPY" ${param.mood == 'HAPPY' ? 'selected' : ''}
+									title="Happy">😊</option>
+								<option value="SAD" ${param.mood == 'SAD' ? 'selected' : ''}
+									title="Sad">😢</option>
 								<option value="RELAXED"
-									${param.mood == 'RELAXED' ? 'selected' : ''}>😌
-									Relaxed</option>
+									${param.mood == 'RELAXED' ? 'selected' : ''} title="Relaxed">😌</option>
 								<option value="EXCITED"
-									${param.mood == 'EXCITED' ? 'selected' : ''}>🤩
-									Excited</option>
+									${param.mood == 'EXCITED' ? 'selected' : ''} title="Excited">🤩</option>
 								<option value="ROMANTIC"
-									${param.mood == 'ROMANTIC' ? 'selected' : ''}>❤️
-									Romantic</option>
-								<option value="ANGRY" ${param.mood == 'ANGRY' ? 'selected' : ''}>😠
-									Angry</option>
+									${param.mood == 'ROMANTIC' ? 'selected' : ''} title="Romantic">❤️</option>
+								<option value="ANGRY" ${param.mood == 'ANGRY' ? 'selected' : ''}
+									title="Angry">😠</option>
 							</select>
 							<button class="btn btn-primary" type="submit">Search
 								Tracks</button>
@@ -166,7 +167,6 @@ body {
 					</tbody>
 				</table>
 
-				<!-- Pagination for users -->
 				<div class="pagination-container mt-3">
 					<button class="btn btn-secondary me-2"
 						onclick="changePage('users', -1)">
@@ -188,22 +188,30 @@ body {
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>Track ID</th>
 							<th>Track Name</th>
 							<th>Popularity</th>
 							<th>Explicit</th>
-							<th>Duration(ms)</th>
+							<th>Duration</th>
 							<th>Action</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${tracks}" var="track">
 							<tr>
-								<td><c:out value="${track.getTrackId()}" /></td>
 								<td><c:out value="${track.getTrackName()}" /></td>
-								<td><c:out value="${track.getPopularity()}" /></td>
-								<td><c:out value="${track.isExplicit()}" /></td>
-								<td><c:out value="${track.getDurationMs()}" /></td>
+								<td><span class="star-rating"> <c:forEach begin="1"
+											end="5" var="i">
+											<c:choose>
+												<c:when test="${i <= track.getPopularity() / 20}">&#9733;</c:when>
+												<c:otherwise>&#9734;</c:otherwise>
+											</c:choose>
+										</c:forEach>
+								</span></td>
+								<td><c:out value="${track.isExplicit() ? 'Yes' : 'No'}" /></td>
+								<td><fmt:formatNumber
+										value="${track.getDurationMs() / 60000}" pattern="#0" />:<fmt:formatNumber
+										value="${(track.getDurationMs() % 60000) / 1000}" pattern="00" />
+								</td>
 								<td><a
 									href="trackdetails?trackid=<c:out value="${track.getTrackId()}"/>"
 									class="btn btn-sm btn-info">View Details</a></td>
@@ -212,7 +220,6 @@ body {
 					</tbody>
 				</table>
 
-				<!-- Pagination for tracks -->
 				<div class="pagination-container mt-3">
 					<button class="btn btn-secondary me-2"
 						onclick="changePage('tracks', -1)">
@@ -253,7 +260,6 @@ body {
 					</tbody>
 				</table>
 
-				<!-- Pagination for albums -->
 				<div class="pagination-container mt-3">
 					<button class="btn btn-secondary me-2"
 						onclick="changePage('albums', -1)">
