@@ -11,15 +11,30 @@
 <title>Update a User</title>
 </head>
 <body>
-	<h1>Update BlogUser</h1>
+	<h1>Update User</h1>
 	<form action="userupdate" method="post">
 		<p>
 			<label for="username">UserName</label>
-			<input id="username" name="username" value="${fn:escapeXml(param.username)}">
+			<input id="username" name="username" value="${fn:escapeXml(param.username)}" readonly>		</p>
+		<p>
+			<label for="password">Password</label>
+			<input id="password" name="password" value="${user.password}">
 		</p>
 		<p>
-			<label for="lastname">New LastName</label>
-			<input id="lastname" name="lastname" value="">
+			<label for="firstname">FirstName</label>
+			<input id="firstname" name="firstname" value="${user.firstName}">
+		</p>
+		<p>
+			<label for="lastname">LastName</label>
+			<input id="lastname" name="lastname" value="${user.lastName}"">
+		</p>
+		<p>
+			<label for="email">Email</label>
+			<input id="email" name="email" value="${user.email}"">
+		</p>
+		<p>
+			<label for="phone">Phone</label>
+			<input id="phone" name="phone" value="${user.phone}"">
 		</p>
 		<p>
 			<input type="submit">

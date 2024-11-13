@@ -74,6 +74,9 @@ body {
 			<p>
 				<i class="fas fa-phone"></i> ${user.phone}
 			</p>
+			<a href="userupdate?username=<c:out value="${user.getUserName()}"/>" class="btn btn-primary">Update User</a>
+			<a href="userdelete?username=<c:out value="${user.getUserName()}"/>" class="btn btn-danger">Delete User</a>
+			
 		</div>
 
 		<div class="section">

@@ -74,7 +74,6 @@ body {
 <body>
 	<div class="container">
 		<h1 class="text-center mb-4">Welcome to SoundWave</h1>
-
 		<div class="search-section">
 			<h2 class="section-title">Search</h2>
 			<ul class="nav nav-tabs" id="searchTabs" role="tablist">
@@ -110,6 +109,8 @@ body {
 							<button class="btn btn-primary" type="submit">Search
 								Users</button>
 						</div>
+					 <a href="usercreate" class="btn btn-primary">Create User</a>
+						
 					</form>
 				</div>
 				<div

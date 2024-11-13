@@ -9,13 +9,23 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Create a User</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+	rel="stylesheet">
 </head>
 <body>
-	<h1>Create BlogUser</h1>
+	<h1>Create User</h1>
 	<form action="usercreate" method="post">
 		<p>
 			<label for="username">UserName</label>
 			<input id="username" name="username" value="">
+		</p>
+		<p>
+			<label for="password">Password</label>
+			<input id="password" name="password" value="">
 		</p>
 		<p>
 			<label for="firstname">FirstName</label>
@@ -26,8 +36,12 @@
 			<input id="lastname" name="lastname" value="">
 		</p>
 		<p>
-			<label for="dob">DoB (yyyy-mm-dd)</label>
-			<input id="dob" name="dob" value="">
+			<label for="email">Email</label>
+			<input id="email" name="email" value="">
+		</p>
+		<p>
+			<label for="phone">Phone</label>
+			<input id="phone" name="phone" value="">
 		</p>
 		<p>
 			<input type="submit">

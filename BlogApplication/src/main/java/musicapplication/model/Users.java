@@ -32,6 +32,10 @@ public class Users {
 		this.phone = phone;
 	}
 
+	public Users(String userName) {
+		this.userName = userName;
+	}
+
 	/**
 	 * Gets the username of the user.
 	 *
