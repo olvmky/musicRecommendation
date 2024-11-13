@@ -4,8 +4,8 @@ package musicapplication.model;
  * Represents a mood tag associated with a track in the music application.
  */
 public class MoodTag {
-    private int moodTagId;
-    private Mood mood;  // Enum for mood
+    private int moodId;  // Renamed to match SQL column: MoodId
+    private Mood mood;   // Enum for mood
     private String trackId;
     private String userName;
 
@@ -17,13 +17,13 @@ public class MoodTag {
     /**
      * Constructs a new MoodTag object.
      *
-     * @param moodTagId The unique identifier for the mood tag.
-     * @param mood      The mood (e.g., HAPPY, SAD, RELAXED, etc.).
-     * @param trackId   The identifier of the track associated with this mood tag.
-     * @param userName  The username of the user who tagged the track with a mood.
+     * @param moodId   The unique identifier for the mood tag.
+     * @param mood     The mood (e.g., HAPPY, SAD, RELAXED, etc.).
+     * @param trackId  The identifier of the track associated with this mood tag.
+     * @param userName The username of the user who tagged the track with a mood.
      */
-    public MoodTag(int moodTagId, Mood mood, String trackId, String userName) {
-        this.moodTagId = moodTagId;
+    public MoodTag(int moodId, Mood mood, String trackId, String userName) {
+        this.moodId = moodId;  // Renamed to match SQL column: MoodId
         this.mood = mood;
         this.trackId = trackId;
         this.userName = userName;
@@ -31,12 +31,12 @@ public class MoodTag {
 
     // Getters and setters
 
-    public int getMoodTagId() {
-        return moodTagId;
+    public int getMoodId() {  // Renamed to match SQL column: MoodId
+        return moodId;
     }
 
-    public void setMoodTagId(int moodTagId) {
-        this.moodTagId = moodTagId;
+    public void setMoodId(int moodId) {  // Renamed to match SQL column: MoodId
+        this.moodId = moodId;
     }
 
     public Mood getMood() {
