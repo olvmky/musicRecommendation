@@ -7,42 +7,79 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Update a User</title>
+<meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SoundWave - Update User</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+	rel="stylesheet">
+<style>
+body {
+	background-color: #f8f9fa;
+}
+
+.card {
+	background-color: #ffffff;
+	border-radius: 15px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	padding: 20px;
+	width: 100%;
+	max-width: 400px;
+}
+
+.card-header {
+	background-color: rgba(0, 123, 255, 0.1);
+	border-bottom: 1px solid #eee;
+	padding: 15px;
+	color: #333;
+	font-size: 1.25rem;
+	font-weight: 600;
+}
+</style>
 </head>
 <body>
-	<h1>Update User</h1>
-	<form action="userupdate" method="post">
-		<p>
-			<label for="username">UserName</label>
-			<input id="username" name="username" value="${fn:escapeXml(param.username)}" readonly>		</p>
-		<p>
-			<label for="password">Password</label>
-			<input id="password" name="password" value="${user.password}">
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+	<div class="card">
+		<h1 class="text-center mb-4">Update User</h1>
+		<form action="userupdate" method="post">
+			<div class="mb-3">
+				<label for="username" class="form-label">UserName</label>
+				<input id="username" name="username" class="form-control" value="${fn:escapeXml(param.username)}" readonly>
+			</div>
+			<div class="mb-3">
+				<label for="password" class="form-label">Password</label>
+				<input id="password" name="password" class="form-control" value="${user.password}">
+			</div>
+			<div class="mb-3">
+				<label for="firstname" class="form-label">FirstName</label>
+				<input id="firstname" name="firstname" class="form-control" value="${user.firstName}">
+			</div>
+			<div class="mb-3">
+				<label for="lastname" class="form-label">LastName</label>
+				<input id="lastname" name="lastname" class="form-control" value="${user.lastName}">
+			</div>
+			<div class="mb-3">
+				<label for="email" class="form-label">Email</label>
+				<input id="email" name="email" class="form-control" value="${user.email}">
+			</div>
+			<div class="mb-3">
+				<label for="phone" class="form-label">Phone</label>
+				<input id="phone" name="phone" class="form-control" value="${user.phone}">
+			</div>
+			<div class="d-grid">
+				<button class="btn btn-primary" type="submit">Submit</button>
+			</div>
+		</form>
+		<p class="mt-3 text-center text-success">
+			<b>${messages.success}</b>
 		</p>
-		<p>
-			<label for="firstname">FirstName</label>
-			<input id="firstname" name="firstname" value="${user.firstName}">
-		</p>
-		<p>
-			<label for="lastname">LastName</label>
-			<input id="lastname" name="lastname" value="${user.lastName}"">
-		</p>
-		<p>
-			<label for="email">Email</label>
-			<input id="email" name="email" value="${user.email}"">
-		</p>
-		<p>
-			<label for="phone">Phone</label>
-			<input id="phone" name="phone" value="${user.phone}"">
-		</p>
-		<p>
-			<input type="submit">
-		</p>
-	</form>
-	<br/><br/>
-	<p>
-		<span id="successMessage"><b>${messages.success}</b></span>
-	</p>
+	</div>
+</div>
+
+<script
+	src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
