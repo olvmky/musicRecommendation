@@ -50,6 +50,9 @@ public class FindUsers extends HttpServlet {
 			messages.put("success", "Displaying results for " + name);
 		}
 		req.setAttribute("users", users);
+		
+		// Set the active tab
+		req.setAttribute("activeTab", "users");
 
 		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
 	}

@@ -47,6 +47,9 @@ public class FindTracks extends HttpServlet {
 		}
 		req.setAttribute("tracks", tracks);
 
+		// Set the active tab
+		req.setAttribute("activeTab", "tracks");
+
 		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
 	}
 

@@ -47,6 +47,9 @@ public class FindAlbums extends HttpServlet {
 		}
 		req.setAttribute("albums", albums);
 
+		// Set the active tab
+		req.setAttribute("activeTab", "albums");
+
 		req.getRequestDispatcher("/Home.jsp").forward(req, resp);
 	}
 
