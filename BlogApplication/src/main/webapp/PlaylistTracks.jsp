@@ -98,18 +98,17 @@ body {
 							<td>${status.index + 1}</td>
 							<td><c:out value="${track.getTrackName()}" /></td>
 							<td><fmt:formatNumber
-									value="${track.getDurationMs() / 60000}" maxFractionDigits="0" />:
-								<fmt:formatNumber
-									value="${track.getDurationMs() % 60000 / 1000}" pattern="00" />
+									value="${track.getDurationMs() / 60000}" pattern="#0" />: <fmt:formatNumber
+									value="${(track.getDurationMs() % 60000) / 1000}" pattern="00" />
 							</td>
-							<td>
-								<div class="star-rating">
-									<c:forEach begin="1" end="5" var="i">
-										<i
-											class="fa${i <= track.getPopularity() / 20 ? 's' : 'r'} fa-star"></i>
+							<td><span class="star-rating"> <c:forEach begin="1"
+										end="5" var="i">
+										<c:choose>
+											<c:when test="${i <= track.getPopularity() / 20}">&#9733;</c:when>
+											<c:otherwise>&#9734;</c:otherwise>
+										</c:choose>
 									</c:forEach>
-								</div>
-							</td>
+							</span></td>
 							<td><c:choose>
 									<c:when test="${track.isExplicit()}">
 										<span class="badge bg-danger">Explicit</span>
