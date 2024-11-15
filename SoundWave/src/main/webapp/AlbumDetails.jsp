@@ -103,7 +103,7 @@ body {
 											</c:otherwise>
 										</c:choose></td>
 									<td><fmt:formatNumber
-											value="${track.getDurationMs() / 60000}" pattern="#0" />: <fmt:formatNumber
+											value="${track.getDurationMs() / 60000}" pattern="#0" />:<fmt:formatNumber
 											value="${track.getDurationMs() % 60000 / 1000}"
 											pattern="00" /></td>
 									<td><a
