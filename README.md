@@ -28,6 +28,12 @@ https://docs.google.com/document/d/1zkMc-PEJyBCUMA6xohjYLKwi5LZxzUa9oKblZsxK07g/
 PM6
 https://docs.google.com/document/d/1cXvSyPRkVdlIwoc3BKGEBVGgsfSp6HAJ7yuTUWqOZYo/edit?usp=sharing
 
+PM6 report
+https://docs.google.com/document/d/1TCu6tFzG-eu9yAOSABpgEXzO7kdoe4kneFkaj6dzl2c/edit?usp=sharing
+
+Slides
+https://docs.google.com/presentation/d/1P4tz6q5rjmap43UJAw0WbunkMxa3HuelijYYtWt5b7I/edit?usp=sharing
+
 ------
 # Music Recommendations
 SoundWave is a personalized music platform that offers mood-based playlists, dynamic music discovery, and real-time social interaction, catering to music lovers seeking more tailored recommendations, interactive features, and evolving playlists beyond the limitations of traditional services.
